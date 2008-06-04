@@ -16,6 +16,7 @@ class Yag_Album implements IteratorAggregate
 
 	public function getIterator()
 	{
+		// TODO: Fix image formats...
 		return new Yag_Find_Image('jpg|JPG', $this->_imageIterator);
 	}
 
