@@ -19,12 +19,7 @@ class Yag_Image
 	{
 		if (null === $this->_album)
 		{
-			$path = $this->getFileInfo()->getPath();
-			$parts = preg_split('/\//', $path);
-			if (isset($parts[count($parts) - 1]))
-			{
-				$this->_album = new Yag_Album($path, $parts[count($parts) - 1]);
-			}			
+				$this->_album = new Yag_Album(new SplFileInfo($this->getFileInfo()->getPath()));			
 		}
 		return $this->_album;
 	}
