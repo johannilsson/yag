@@ -5,9 +5,9 @@ require_once 'Yag/Album.php';
 
 class Yag_Find_Album extends Yag_Find_Abstract 
 {
-	public function __construct($path, $search)
+	public function __construct($search, Iterator $iterator)
 	{
-		parent::__construct($path, $search, new RecursiveDirectoryIterator($path));
+		parent::__construct($search, $iterator);
 	}
 
 	public function accept()
@@ -21,6 +21,12 @@ class Yag_Find_Album extends Yag_Find_Abstract
 
 	public function current()
 	{
-		return new Yag_Album($this->getPath(), parent::current()->getFilename());
+		return new Yag_Album(parent::current());
+	}
+
+	public static function find($path, $search)
+	{
+		$iterator = new RecursiveDirectoryIterator($path);
+		return new self($search, $iterator); 
 	}
 }
