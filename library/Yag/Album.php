@@ -4,33 +4,29 @@ require_once 'Yag/Find/Image.php';
 
 class Yag_Album implements IteratorAggregate 
 {
-	private $_name;
-	private $_path;
+	private $_fileInfo;
+	private $_imageIterator = null;
 
-	public function __construct($path, $name)
-	{
-		$this->_name = $name;
-		$this->_path = $path;
-	}
-
-	public function getName()
-	{
-		return $this->_name;
+	public function __construct(SplFileInfo $fileInfo)
+	{ 
+		$this->_fileInfo = $fileInfo;
+		//$this->_imageIterator = new CachingIterator(new RecursiveDirectoryIterator($this->_path . DIRECTORY_SEPARATOR . $this->_name), CachingIterator::FULL_CACHE);
+		$this->_imageIterator = new RecursiveDirectoryIterator($fileInfo->getRealPath());
 	}
 
 	public function getIterator()
 	{
-		return new Yag_Find_Image($this->_path . DIRECTORY_SEPARATOR . $this->_name, 'jpg|JPG');
+		return new Yag_Find_Image('jpg|JPG', $this->_imageIterator);
 	}
 
 	public function __toString()
 	{
-		return $this->getName();
+		return pathinfo($this->_fileInfo->getFilename(), PATHINFO_FILENAME);
 	}
 
 	public function getImage($fileName)
 	{
-		$search = new Yag_Find_Image($this->_path . DIRECTORY_SEPARATOR . $this->_name, $fileName);
+		$search = new Yag_Find_Image($fileName, $this->_imageIterator);
 		return $search->get();
 	}
 
