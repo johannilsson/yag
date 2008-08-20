@@ -1,0 +1,7 @@
+<ul class="album">
+<?php foreach ($this->paginator as $photo): ?>
+	<li><a href="<?php echo $this->url(array('id' => $photo->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small')) ?></a></li>
+<?php endforeach; ?>
+</ul>
+
+<?php echo $this->paginationControl($this->paginator)?>

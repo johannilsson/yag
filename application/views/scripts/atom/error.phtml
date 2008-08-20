@@ -1,0 +1,8 @@
+<?php
+if (is_array($this->errorMessages)) {
+    foreach ($this->errorMessages as $message) {
+        echo $message . "\n";
+    }
+} else {
+    echo 'an error occurred';
+} 

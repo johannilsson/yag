@@ -1,0 +1,8 @@
+<h2><?php echo $this->photo->title ?></h2>
+<div class="photo">
+    <?php echo $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'large')) ?>
+</div>
+<div class="photo-details">
+<p><?php echo $this->photo->description ?></p>
+<p>Taken on <?php echo $this->photo->taken_on ?></p>
+</div>

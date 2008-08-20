@@ -1,0 +1,28 @@
+
+<?php //var_dump($this);//getItem($itemNumber, $pageNumber = null)?>
+
+<?php if ($this->pageCount): ?> 
+<div id="paginationControl">
+<?= $this->firstItemNumber; ?> - <?= $this->lastItemNumber; ?> 
+of <?= $this->totalItemCount; ?>
+
+<a href="<?= $this->url(array('page' => $this->first)); ?>">First</a> | 
+
+<!-- Previous page link --> 
+<?php if (isset($this->previous)): ?> 
+  <a href="<?= $this->url(array('page' => $this->previous)); ?>">&lt; Previous</a> | 
+<?php else: ?> 
+  <span class="disabled">&lt; Previous</span> | 
+<?php endif; ?> 
+ 
+<!-- Next page link --> 
+<?php if (isset($this->next)): ?> 
+  <a href="<?= $this->url(array('page' => $this->next)); ?>">Next &gt;</a> |
+<?php else: ?> 
+  <span class="disabled">Next &gt;</span> |
+<?php endif; ?>
+
+<a href="<?= $this->url(array('page' => $this->last)); ?>">Last</a>
+
+</div> 
+<?php endif; ?>

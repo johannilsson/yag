@@ -1,0 +1,54 @@
+<?php echo "<?xml version=\"1.0\" ?>";?>
+<configure_file service_id="yag" category_id="1" coding_id="2" version="1.0">
+
+    <provider>
+        <configure_file_URL>http://192.168.1.114/services/nokia/</configure_file_URL> 
+        <browserView reltype="mobile" />
+        <signup_URL />
+        <easy_registration_URL></easy_registration_URL>
+    </provider>
+
+    <laf>
+        <title>Yag</title>
+        <!-- <context_pane_icon file="flickr.svg">flickr.svg</context_pane_icon>
+        <selection_list_icon file="flickr.svg">flickr.svg</selection_list_icon>-->
+    </laf>
+
+    <media_options>
+        <format_list>
+                <format>image/jpg</format>
+                <format>image/jpeg</format>
+                <format>image/bmp</format>
+                <format>image/png</format>
+                <format>image/gif</format>
+                <format>image/tiff</format>
+         </format_list>
+         <maximum_pixels horizontal="0" vertical="0" />
+         <maximum_bytes bytes="5242880" />
+    </media_options>
+
+    <entry_options>
+
+        <title_text present="1" required="0" />
+        <caption_text present="0" required="0" />
+        <body_text present="1" required="0" />
+        <max_items items="6" />
+        <min_items items="1" />
+        <max_size size="0" />
+        <tags present="1" required="0"/> 
+        <privacy_levels present="1" required="1" /> 
+    </entry_options>
+
+    <location_options>
+        <gps_info present="1" />
+        <network_info present="1" />
+    </location_options>
+
+    <protocol_options>
+            <protocol plugin="Atom" version="0.3" authentication="wsse">
+            <endpoint_path>http://192.168.1.114/atom/</endpoint_path>
+            <roundtrip_editing>0</roundtrip_editing>
+        </protocol>
+    </protocol_options>
+ 
+</configure_file>

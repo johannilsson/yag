@@ -1,0 +1,5 @@
+<ul class="album">
+<?php foreach ($this->set as $photo): ?>
+	<li><a href="<?php echo $this->url(array('controller' => 'album', 'action' => 'show', 'name' => $this->name, 'id' => $photo->id), 'photo'); ?>"><img src="<?php echo $photo->photo->url('small'); ?>" alt="<?php //echo $photo->description ?>"></a></li>
+<?php endforeach; ?>
+</ul>

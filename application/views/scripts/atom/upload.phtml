@@ -1,0 +1,9 @@
+<?php echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>";?>
+
+<entry xmlns="http://www.w3.org/2005/Atom">
+    <title><?php echo $this->photo->title ?></title>
+    <summary>photo</summary>
+    <issued><?php echo date('Y-m-d\Th:i:s\Z'); ?></issued>
+    <link type="text/html" rel="alternative" href="<?php echo $this->url . $this->photo->file->url() ?>" title="HTML" />
+    <id><?php echo $this->photo->id ?></id>
+</entry>
