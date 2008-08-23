@@ -33,21 +33,19 @@ class AtomController extends Zend_Controller_Action
     {
         $config = Zend_Registry::get('atom-config');
 
-        if (false == in_array($this->_request->getActionName(), $config->securedActions->toArray()))
-        {
-            return; // found unprotected action
+        if (false == in_array($this->_request->getActionName(), $config->securedActions->toArray()) 
+            || $config->authenticationDisabled) {
+            return; // found public action or authentication is disabled
         }
 
-        if (false == $config->authenticationDisabled) {
-	        $adapter = new Yag_Auth_Adapter_Http_Wsse($config->wsse->toArray());   
-	        $adapter->setRequest($this->_request);
-	        $adapter->setResponse($this->_response);
+        $adapter = new Yag_Auth_Adapter_Http_Wsse($config->wsse->toArray());   
+        $adapter->setRequest($this->_request);
+        $adapter->setResponse($this->_response);
 
-	        $result = $adapter->authenticate();
-	        if (false == $result->isValid()) {
-	            $this->view->errorMessages = $result->getMessages();
-	            $this->_forward('error');
-	        }
+        $result = $adapter->authenticate();
+        if (false == $result->isValid()) {
+            $this->view->errorMessages = $result->getMessages();
+            $this->_forward('error');
         }
     }
 
