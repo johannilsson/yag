@@ -16,6 +16,11 @@
 
 require_once 'Zend/Controller/Action.php';
 
+/**
+ * Auth controller
+ * 
+ * 
+ */
 class AuthController extends Zend_Controller_Action
 {
     /**
@@ -37,7 +42,10 @@ class AuthController extends Zend_Controller_Action
         $auth = Zend_Auth::getInstance();
 
         if ($auth->hasIdentity()) {
-            $this->_redirect($this->_helper->url->simple('index'));
+            $config = Zend_Registry::get('security-config');
+            $this->_redirect($this->_helper->url->simple(
+                $config->redirect->action, 
+                $config->redirect->controller));
         } else if ('' != $this->_request->getParam('openid_mode')) {
             return $this->_forward('verify');
         }
@@ -48,10 +56,10 @@ class AuthController extends Zend_Controller_Action
 
         if ($this->_request->isPost()) {
             $formData = $this->_request->getPost();
-            if ($form->isValid($formData) || '' != $this->_request->getParam('openid_mode')) {
+            if ($form->isValid($formData)) {
                 $openIdIdentifier = $this->_request->getPost('openid_identifier');
                 $openIdAdapter = new Zend_Auth_Adapter_OpenId($openIdIdentifier);
-                $auth->authenticate($openIdAdapter);
+                $auth->authenticate($openIdAdapter); // will redirect to the open id provider
             } else {
                 $form->populate($formData);
             }
@@ -59,14 +67,14 @@ class AuthController extends Zend_Controller_Action
     }
 
     /**
-     * verify action
+     * verify login action
      *
      */
     public function verifyAction()
     {
         $auth = Zend_Auth::getInstance();
         if ('' != $this->_request->getParam('openid_mode')) {
-            $openIdAdapter = new Zend_Auth_Adapter_OpenId($openIdIdentifier);
+            $openIdAdapter = new Zend_Auth_Adapter_OpenId();
             $result = $auth->authenticate($openIdAdapter);
             if ($result->isValid()) {
                 $auth->getStorage()->write($result->getIdentity());
