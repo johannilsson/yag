@@ -8,7 +8,7 @@
  * with this package in the file LICENSE.
  *
  * @category   Yag
- * @package    Controllers
+ * @package    Models
  * @copyright  Copyright (c) 2008 Johan Nilsson. (http://www.markupartist.com)
  * @license    New BSD License
  */
