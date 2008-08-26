@@ -8,7 +8,8 @@
  * with this package in the file LICENSE.
  *
  * @category   Yag
- * @package    Controllers
+ * @package    Yag_Db
+ * @subpackage Yag_Db_Table
  * @copyright  Copyright (c) 2008 Johan Nilsson. (http://www.markupartist.com)
  * @license    New BSD License
  */
