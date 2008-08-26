@@ -8,7 +8,7 @@
  * with this package in the file LICENSE.
  *
  * @category   Yag
- * @package    Controllers
+ * @package    Models
  * @copyright  Copyright (c) 2008 Johan Nilsson. (http://www.markupartist.com)
  * @license    New BSD License
  */
@@ -41,7 +41,10 @@ class Photos extends Yag_Db_Table
     protected function _setupPlugins()
     {
         $attachment = new Gem_Db_Table_Plugin_Attachment($this->_attachment);
+        $extractExif = new Yag_Db_Table_Plugin_ExtractExif();
+
         $this->addPlugin($attachment);
+        $this->addPlugin($extractExif);
     }
 
     /**
@@ -79,6 +82,9 @@ class Photos extends Yag_Db_Table
         $albumsPhotos->deleteByPhotoId($photo->id);
 
         foreach ($albumNames as $albumName) {
+            if ($albumName == '') {
+                continue; // skip bogus names in array.
+            }
             $album = $albums->findByName(trim($albumName));
 
             if (null == $album) {
@@ -109,5 +115,17 @@ class Photos extends Yag_Db_Table
         $filename = '/tmp/app-' . date('Ymhis', time()) . '.jpg';
         file_put_contents($filename, $data);
         return $filename;
+    }
+
+    /**
+     * Reads exif data from photo
+     *
+     * @param Zend_Db_Table_Row_Abstract $photo
+     * @return array
+     */
+    public function readExif(Zend_Db_Table_Row_Abstract $photo)
+    {
+        $exif = exif_read_data($photo->file->realPath());
+        return $exif;
     }
 }
