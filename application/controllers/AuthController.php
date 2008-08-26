@@ -42,10 +42,10 @@ class AuthController extends Zend_Controller_Action
         $auth = Zend_Auth::getInstance();
 
         if ($auth->hasIdentity()) {
-            $config = Zend_Registry::get('security-config');
+            $config = Zend_Registry::get('auth-config');
             $this->_redirect($this->_helper->url->simple(
-                $config->redirect->action, 
-                $config->redirect->controller));
+                $config->auth->login->welcome->action, 
+                $config->auth->login->welcome->controller));
         } else if ('' != $this->_request->getParam('openid_mode')) {
             return $this->_forward('verify');
         }
@@ -76,17 +76,18 @@ class AuthController extends Zend_Controller_Action
         if ('' != $this->_request->getParam('openid_mode')) {
             $openIdAdapter = new Zend_Auth_Adapter_OpenId();
             $result = $auth->authenticate($openIdAdapter);
-            if ($result->isValid()) {
+            $config = Zend_Registry::get('auth-config');
+            // Quick fix for checking identity against conf, 
+            // TODO: fix proper error message for this.
+            if ($result->isValid() && in_array($result->getIdentity(), $config->auth->login->identities->toArray())) {
                 $auth->getStorage()->write($result->getIdentity());
-
-                $config = Zend_Registry::get('security-config');
                 $this->_redirect($this->_helper->url->simple(
-                    $config->redirect->action, 
-                    $config->redirect->controller));
+                    $config->auth->login->welcome->action, 
+                    $config->auth->login->welcome->controller));
             } else {
                 $auth->clearIdentity();
-                $this->view->errorMessages = $result->getMessages();
-                $this->render('login');
+                $this->view->errorMessages = $result->getMessages(); // change to use flash
+                $this->_redirect($this->_helper->url->simple('login'));
             }
         }
     }

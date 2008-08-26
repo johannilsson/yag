@@ -35,8 +35,8 @@ Zend_Loader::registerAutoload();
  */
 $config = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/atom.ini', 'production');
 Zend_Registry::set('atom-config', $config);
-$config = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/security.ini', 'production');
-Zend_Registry::set('security-config', $config);
+$authConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth.ini', 'production');
+Zend_Registry::set('auth-config', $authConfig);
 
 //Zend_Db_Table_Plugin_Broker::addPrefixPath('Ma_Plugin', 'Ma/Plugin');  
 
@@ -90,6 +90,6 @@ ini_set('error_log', '/var/log/php/php_error_log');
 /*
  * Controller plugins
  */
-$front->registerPlugin(new Yag_Controller_Plugin_Auth());
+$front->registerPlugin(new Yag_Controller_Plugin_Auth($authConfig));
 
 $front->run(dirname(__FILE__) . '/controllers');

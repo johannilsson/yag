@@ -16,6 +16,23 @@
 class Yag_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
 {
     /**
+     * Configuration
+     *
+     * @var Zend_Config
+     */
+    private $config = array();
+
+    /**
+     * Constructor
+     *
+     * @param array $securedAreas
+     */
+    public function __construct(Zend_Config $config)
+    {
+        $this->config = $config;
+    }
+    
+    /**
      * Will alter the request and point to a login action if the requested
      * action is configured as private.
      *
@@ -23,17 +40,13 @@ class Yag_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        // TODO: Move to constructor?
-        $config = Zend_Registry::get('security-config');
-        $authConfig = $config->auth;
-
         if (false === Zend_Auth::getInstance()->hasIdentity()) {
-	        foreach ($authConfig->areas->toArray() as $controller => $actions) {
+	        foreach ($this->config->auth->securedAreas->toArray() as $controller => $actions) {
 	            if ($controller == $this->_request->getControllerName() && 
 	                in_array($this->_request->getActionName(), $actions)
 	            ) {
-	                $request->setControllerName($authConfig->controller);
-	                $request->setActionName($authConfig->action);
+	                $request->setControllerName($this->config->auth->login->controller);
+	                $request->setActionName($this->config->auth->login->action);
 	            }
 	        }
         }
