@@ -103,17 +103,16 @@ class PhotoController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
 
             if ($photoForm->isValid($formData)) {
-
                 // If it is an image upload set the photo.
-                if (null != $photoForm->getValue('file')) {
+                if ($photoForm->getElement('file')->getTransferAdapter()->isReceived()) {
                     $photo->file = $photoForm->getValue('file');
                 }
 
                 $photo->taken_on    = $photoForm->getValue('taken_on');
                 $photo->title       = $photoForm->getValue('title');
                 $photo->description = $photoForm->getValue('description');
-                $photo->save();
 
+                $photo->save();
                 $photos->assocciateWith($photo, explode(',', $photoForm->getValue('albums')));
             }
         }
