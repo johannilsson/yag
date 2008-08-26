@@ -37,3 +37,19 @@ CREATE TABLE `albums_photos` (
   `photo_id` int(11) NOT NULL,
   PRIMARY KEY  (`album_id`,`photo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table geo_tags;
+CREATE TABLE `geo_tags` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(100) default NULL,
+  `longitude` float(10,6) default NULL,
+  `latitude` float(10,6) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8
+
+drop table geo_tagged_photos;
+CREATE TABLE `geo_tagged_photos` (
+  `geo_tag_id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  PRIMARY KEY  (`geo_tag_id`,`photo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
