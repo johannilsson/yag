@@ -29,13 +29,14 @@ class Yag_GeoCode
     private $_degrees = 0;
     private $_minutes = 0;
     private $_seconds = 0;
-
+    //private $_hemisphere; // TODO: could be calculated
+    
     /**
      * Constructor
      *
      * @param float|array $degrees
-     * @param unknown_type $minutes
-     * @param unknown_type $seconds
+     * @param int $minutes
+     * @param int $seconds
      */
     public function __construct($degrees = 0, $minutes = 0, $seconds = 0)
     {
