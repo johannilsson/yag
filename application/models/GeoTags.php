@@ -13,6 +13,10 @@
  * @license    New BSD License
  */
 
+/**
+ * GeoTags model
+ *
+ */
 class GeoTags extends Yag_Db_Table
 {
     /**
@@ -87,54 +91,4 @@ class GeoTags extends Yag_Db_Table
 	    }
 	    return $parts;
 	}
-
-    /**
-     * Degrees Minutes Seconds to Decimal Degrees
-     * 
-     * Decimal degrees = whole number of degrees, plus minutes divided by 60, plus seconds divided by 3600
-     *
-     * @param int|array $degrees
-     * @param float $minutes
-     * @param float $seconds
-     * @return float
-     */
-    /*
-    public function toDecimalDegrees($degrees, $minutes = 0, $seconds = 0)
-    {
-        if (is_array($degrees)) {
-            $minutes = $degrees[1];
-            $seconds = $degrees[2];
-            $degrees = $degrees[0];
-        }
-
-	    $posNeg = 1;
-	    if ($degrees < 0) { 
-	        $posNeg = -1; 
-	    }
-
-        $decimalDegrees = $posNeg * $degrees + 1 * $minutes / 60 + 1 * $seconds / 3600;
-        return $posNeg * $decimalDegrees;
-    }
-*/
-    /**
-     * calculates degrees minutes and seconds from supplied decimal degree value 
-     *
-     * @see http://geography.about.com/library/howto/htdegrees.htm
-     * @param float $decimalDegrees
-     * @return array
-     */
-    /*
-    public function toDegreesMinutesSeconds($decimalDegrees)
-    {
-        // TODO: Fix error handling...
-	    $pattern = '/^(-?[0-9]+)(.[0-9]+)/';
-	    preg_match($pattern, $decimalDegrees, $matches);
-	    $degrees = $matches[1];
-	    preg_match($pattern, $matches[2] * 60, $matches);
-	    $minutes = $matches[1];
-	    $seconds = $matches[2] * 60;
-	
-	    return array($degrees, $minutes, $seconds);
-    }
-*/
 }
