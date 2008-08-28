@@ -63,10 +63,14 @@ class GeoTags extends Yag_Db_Table
             throw new RuntimeException('geo data is not present');
         }
 
+        $latitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLatitude']));
+        $longitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLongitude']));
+
         // TODO: validate if position already exists
         $geoTag = $this->createRow();
-        $geoTag->latitude  = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLatitude']));
-        $geoTag->longitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLongitude']));
+        $geoTag->latitude  = $latitude->toDecimalDegrees();
+        $geoTag->longitude = $longitude->toDecimalDegrees();
+
         $geoTag->save();
 
         return $geoTag;
