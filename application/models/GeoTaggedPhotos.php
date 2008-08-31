@@ -62,6 +62,7 @@ class GeoTaggedPhotos extends Yag_Db_Table
                 'photo_id' => $photo->id)
             );
             $geoTaggedPhoto->save();
+
         } catch (RuntimeException $e) {
             ;
         }    
