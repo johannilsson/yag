@@ -1,0 +1,3 @@
+<?php if ($this->latitude instanceof Yag_GeoCode && $this->longitude instanceof Yag_GeoCode) : ?>
+<p><a href="http://maps.google.com/maps?q=<?php echo $this->latitude->toDecimalDegrees()?>,<?php echo $this->longitude->toDecimalDegrees()?>&t=h"><?php echo $this->latitude?>, <?php echo $this->longitude?></a></p>
+<?php endif;?>
