@@ -35,9 +35,11 @@ class PhotoController extends Zend_Controller_Action
         );
 
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
-        $contextSwitch->addContext('atom', $context)
-                      ->addActionContext('list', 'atom')
-                      ->initContext();
+        if (false === $contextSwitch->hasContext('atom')) {
+            $contextSwitch->addContext('atom', $context)
+                          ->addActionContext('list', 'atom')
+                          ->initContext();
+        }
     }
 
     /**
@@ -186,15 +188,40 @@ class PhotoController extends Zend_Controller_Action
     {
         $photos = new Photos();
 
-        $photo   = $photos->findOne($this->getRequest()->getParam('id'));
+        $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
         $detailSet = $photo->findPhotoDetailsByPhoto();
-
         $details = null;
         if (1 == count($detailSet)) {
             $details = $detailSet->getRow(0);
         }
 
-        $this->view->details = $details;
-        $this->view->photo   = $photo; 
+        $latitude = $longitude = '';
+        $geoTagSet = $photo->findGeoTagsViaGeoTaggedPhotosByPhoto();
+        if (null !== ($geoTag = $geoTagSet->current())) {
+            $latitude  = Yag_GeoCode::createFromDecimalDegrees($geoTag->latitude);
+            $longitude = Yag_GeoCode::createFromDecimalDegrees($geoTag->longitude);
+        }
+
+        $this->view->longitude  = $longitude;
+        $this->view->latitude   = $latitude;
+        $this->view->details    = $details;
+        $this->view->photo      = $photo; 
+    }
+
+    /**
+     * Shows previous and next photos. 
+     *
+     */
+    public function streamAction()
+    {
+        $id     = (int) $this->getRequest()->getParam('id');
+        $album  = (string) $this->getRequest()->getParam('album', '');
+
+        $photos = new Photos();
+
+        $current = $photos->fetchRow($photos->select()->where('id = ?', $id));
+
+        $this->view->previous = $photos->getNeighbour($current, 'previous');
+        $this->view->next     = $photos->getNeighbour($current, 'next');
     }
 }
