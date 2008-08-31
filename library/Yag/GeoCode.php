@@ -60,13 +60,15 @@ class Yag_GeoCode
      */
     public static function createFromDecimalDegrees($decimalDegrees)
     {
-        // TODO: Fix error handling...
+        // TODO: Fix error handling and validation, isset is temporary for now...
         $pattern = '/^(-?[0-9]+)(.[0-9]+)/';
         preg_match($pattern, $decimalDegrees, $matches);
-        $degrees = $matches[1];
+        $degrees = isset($matches[1]) ? $matches[1] : 0;
+
         preg_match($pattern, $matches[2] * 60, $matches);
-        $minutes = $matches[1];
-        $seconds = $matches[2] * 60;
+        $minutes = isset($matches[1]) ? $matches[1] : 0;
+        $seconds = isset($matches[2]) ? $matches[2] : 0;
+        $seconds = $seconds * 60;
 
         return new self($degrees, $minutes, $seconds);
     }
