@@ -128,4 +128,21 @@ class Photos extends Yag_Db_Table
         $exif = exif_read_data($photo->file->realPath());
         return $exif;
     }
+
+    /**
+     * Get prevoious or next nighbour of a photo. 
+     *
+     * @param Zend_Db_Table_Row_Abstract $photo
+     * @param unknown_type $direction
+     * @param unknown_type $album
+     * @return unknown
+     */
+    public function getNeighbour(Zend_Db_Table_Row_Abstract $photo, $direction, $album = '')
+    {
+        $direction = ('next' == $direction) ? '>' : '<';
+        $order     = ('>' == $direction) ? 'ASC' : 'DESC';
+
+        $select = $this->select()->where('created_on ' . $direction  . ' ?', $photo->created_on)->order('created_on ' . $order)->limit(1);
+        return $this->fetchRow($select);
+    }
 }
