@@ -38,6 +38,11 @@ Zend_Registry::set('atom-config', $config);
 $authConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth.ini', 'production');
 Zend_Registry::set('auth-config', $authConfig);
 
+/*
+ * Date settings
+ */
+date_default_timezone_set('UTC');
+
 //Zend_Db_Table_Plugin_Broker::addPrefixPath('Ma_Plugin', 'Ma/Plugin');  
 
 $layoutOptions = array(
@@ -85,7 +90,7 @@ $front->setParam('noErrorHandler', true);
 $front->throwExceptions(true);
 error_reporting(E_ALL);
 ini_set('display_errors', true);
-ini_set('error_log', '/var/log/php/php_error_log');
+ini_set('error_log', dirname(__FILE__) . '../logs/php_error_log');
 
 /*
  * Controller plugins
