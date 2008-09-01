@@ -14,9 +14,10 @@
  * @license    New BSD License
  */
 
-require_once 'Zend/Db/Table/Plugin/Abstract.php';
-require_once 'Gem/File.php';
-
+/**
+ * Plugin that extracts photo details from a photo when saved
+ *
+ */
 class Yag_Db_Table_Plugin_ExtractExif extends Zend_Db_Table_Plugin_Abstract
 {
     /**
@@ -33,7 +34,7 @@ class Yag_Db_Table_Plugin_ExtractExif extends Zend_Db_Table_Plugin_Abstract
 
         $exif = $photo->getTable()->readExif($photo);
 
-        $geoTaggedPhotos = new GeoTaggedPhotos();
-        $geoTaggedPhotos->assocciateFromExif($photo, $exif);
+        $photoDetails = new PhotoDetails();
+        $photoDetails->createFromExif($photo, $exif);
     }
 }

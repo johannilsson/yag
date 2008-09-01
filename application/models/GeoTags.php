@@ -60,18 +60,33 @@ class GeoTags extends Yag_Db_Table
     public function createFromExif(array $exif)
     {
         if (false === isset($exif['GPSVersion'])) {
-            throw new RuntimeException('geo data is not present');
+            return null;
         }
 
         $latitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLatitude']));
         $longitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLongitude']));
+        $latitudeDd = $latitude->toDecimalDegrees();
+        $longitudeDd = $longitude->toDecimalDegrees();
 
-        // TODO: validate if position already exists
-        $geoTag = $this->createRow();
-        $geoTag->latitude  = $latitude->toDecimalDegrees();
-        $geoTag->longitude = $longitude->toDecimalDegrees();
+        $geoTag = null;
+        try {
+	        $geoTag = $this->createRow();
+	        $geoTag->latitude  = sprintf('%10.6f', $latitudeDd);
+	        $geoTag->longitude = sprintf('%10.6f', $longitudeDd);
+	        $geoTag->save();
+        } catch (Zend_Db_Statement_Exception $e) {
+            preg_match('/Duplicate entry \'([0-9.]+)-([0-9.]+)\'/', $e->getMessage(), $matches);
 
-        $geoTag->save();
+            if (empty($matches)) {
+                return null;
+            }
+
+            $select = $this->select()
+                ->where('longitude = ?', (float) $matches[1])
+                ->where('latitude = ?', (float) $matches[2]);
+            $geoTag = $this->fetchRow($select);
+        }
+        //}
 
         return $geoTag;
     }
