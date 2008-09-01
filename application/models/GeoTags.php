@@ -70,10 +70,10 @@ class GeoTags extends Yag_Db_Table
 
         $geoTag = null;
         try {
-	        $geoTag = $this->createRow();
-	        $geoTag->latitude  = sprintf('%10.6f', $latitudeDd);
-	        $geoTag->longitude = sprintf('%10.6f', $longitudeDd);
-	        $geoTag->save();
+            $geoTag = $this->createRow();
+            $geoTag->latitude  = sprintf('%10.6f', $latitudeDd);
+            $geoTag->longitude = sprintf('%10.6f', $longitudeDd);
+            $geoTag->save();
         } catch (Zend_Db_Statement_Exception $e) {
             preg_match('/Duplicate entry \'([0-9.]+)-([0-9.]+)\'/', $e->getMessage(), $matches);
 
@@ -93,21 +93,21 @@ class GeoTags extends Yag_Db_Table
 
     /**
      * Extracts and converts degrees minutes seconds from exif array.
-     * 
+     *
      * Passed data should be either the GPSLatitude or GPSLongitude array.
      *
      * @param array $data
      * @return array
      */
-	public function toDegreesMinutesSecondsFromExif(array $data)
-	{
-	    $parts = array();
-	    foreach ($data as $part)
-	    {
-	        $values = explode('/', $part);
-	        $s = $values[0] / $values[1];
-	        $parts[] = $s;
-	    }
-	    return $parts;
-	}
+    public function toDegreesMinutesSecondsFromExif(array $data)
+    {
+        $parts = array();
+        foreach ($data as $part)
+        {
+            $values = explode('/', $part);
+            $s = $values[0] / $values[1];
+            $parts[] = $s;
+        }
+        return $parts;
+    }
 }
