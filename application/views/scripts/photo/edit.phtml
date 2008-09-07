@@ -1,6 +1,6 @@
 <h1>Edit Photo</h1> 
 
 <?php echo $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'small')) ?>
-
+<p><a href="<?php echo $this->url(array('controller' => 'photo', 'action' => 'replace', 'id' => $this->photo->id)); ?>">Replace photo</a></p>
 <?php echo $this->photoForm ;?>
 
