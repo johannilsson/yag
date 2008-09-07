@@ -93,7 +93,7 @@ class PhotoController extends Zend_Controller_Action
     {
         $photos = new Photos();
         $photo = $photos->findOne($this->getRequest()->getParam('id'));
-        
+
         $tagSet = $photo->findTagsViaTaggedPhotosByPhoto();
         $tagNames = array();
         foreach ($tagSet as $tag)
@@ -203,23 +203,20 @@ class PhotoController extends Zend_Controller_Action
 
         $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
 
+        $details = $longitude = $latitude = null;
         $detailSet = $photo->findPhotoDetailsByPhoto();
-        $details = null;
         if (1 == count($detailSet)) {
             $details = $detailSet->getRow(0);
+
+            if (null !== $details->place_id 
+            && null !== ($place = $details->findParentRow('Places'))) {
+                $latitude = new Yag_GeoCode($place->latitude);
+                $longitude = new Yag_GeoCode($place->longitude);
+            }
         }
 
-        /*
-        $latitude = $longitude = '';
-        $geoTagSet = $photo->findGeoTagsViaGeoTaggedPhotosByPhoto();
-        if (null !== ($geoTag = $geoTagSet->current())) {
-            $latitude  = Yag_GeoCode::createFromDecimalDegrees($geoTag->latitude);
-            $longitude = Yag_GeoCode::createFromDecimalDegrees($geoTag->longitude);
-        }
-        */
-
-        $this->view->longitude  = null;//$longitude;
-        $this->view->latitude   = null; //$latitude;
+        $this->view->longitude  = $longitude;
+        $this->view->latitude   = $latitude;
         $this->view->details    = $details;
         $this->view->photo      = $photo; 
     }
