@@ -38,7 +38,7 @@ class Places extends Yag_Db_Table
      *
      * @var string
      */
-    protected $_dependentTables = array('Photos');
+    protected $_dependentTables = array('PhotoDetails');
 
     protected $_filters = array(
         '*' => 'StringTrim',
