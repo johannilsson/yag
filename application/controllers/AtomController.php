@@ -115,8 +115,8 @@ class AtomController extends Zend_Controller_Action
                 }
                 // Set tags
                 if ('' != ($tags = $entry->{"dc:subject"})) {
-                    $tags = explode(' ', $tags);
-                    $photos->assocciateWith($photo, $tags);
+                    $taggedPhotos = new TaggedPhotos();
+                    $taggedPhotos->assocciatePhotoWith($photo, explode(',', $tags));
                 }
             } else if ('' != $entry->content()) {
 	            $file = $photos->createTmpFile(base64_decode($entry->content()));
