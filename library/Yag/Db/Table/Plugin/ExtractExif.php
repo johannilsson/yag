@@ -20,6 +20,13 @@
  */
 class Yag_Db_Table_Plugin_ExtractExif extends Zend_Db_Table_Plugin_Abstract
 {
+    private $_extractExif = false;
+
+    public function preSaveRow(Zend_Db_Table_Row_Abstract $photo)
+    {
+        $this->_extractExif = $photo->isModified('file');
+    }
+
     /**
      * 
      *
@@ -28,7 +35,8 @@ class Yag_Db_Table_Plugin_ExtractExif extends Zend_Db_Table_Plugin_Abstract
      */
     public function postSaveRow(Zend_Db_Table_Row_Abstract $photo)
     {
-        if ('Photos' != get_class($photo->getTable())) {
+        if (false === $this->_extractExif 
+            || 'Photos' != get_class($photo->getTable())) {
             return;
         }
 
