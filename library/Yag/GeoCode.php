@@ -74,6 +74,31 @@ class Yag_GeoCode
     }
 
     /**
+     * Extracts and converts degrees minutes seconds from exif array.
+     *
+     * Passed data should be either the GPSLatitude or GPSLongitude array.
+     *
+     * Example: 
+     * <code>
+     *
+     * </code>
+     *
+     * @param array $data
+     * @return array
+     */
+    public static function createFromExif(array $data)
+    {
+        $parts = array();
+        foreach ($data as $part)
+        {
+            $values = explode('/', $part);
+            $s = $values[0] / $values[1];
+            $parts[] = $s;
+        }
+        return new self($parts);
+    }
+
+    /**
      * Degrees Minutes Seconds to Decimal Degrees
      * 
      * Decimal degrees = whole number of degrees, plus minutes divided by 60, plus seconds divided by 3600
