@@ -73,7 +73,7 @@ class TaggedPhotos extends Yag_Db_Table
 
         $tags = new Tags();
 
-        $accoccTags = array();
+        $assoccTags = array();
         foreach ($tagNames as $name) {
             if ($name == '') {
                 continue; // skip bogus names in array.
@@ -92,8 +92,8 @@ class TaggedPhotos extends Yag_Db_Table
             );
             $taggedPhotos->save();
             
-            $accoccTags[] = $tag;
+            $assoccTags[] = $tag;
         }
-        return $accoccTags;
+        return $assoccTags;
     }    
 }
