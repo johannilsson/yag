@@ -27,12 +27,21 @@ class Yag_Db_Table_Row extends Zend_Db_Table_Row
 
     public function save()
     {
+    /*
         $this->_filterInput = $this->_getTable()->filterData($this->_data);
 
         if (false === $this->_filterInput->isValid()) {
-            throw new RuntimeException('invalid data');
+            throw new RuntimeException('invalid data ');
         }
+    */
         parent::save();
     }
 
+    public function isModified($field)
+    {
+        if (isset($this->_modifiedFields[$field])) {
+            return true;
+        }
+        return false;
+    }
 }
