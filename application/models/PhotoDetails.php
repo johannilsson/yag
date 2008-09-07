@@ -29,9 +29,9 @@ class PhotoDetails extends Yag_Db_Table
             'refTableClass'     => 'Photos',
             'refColumns'        => array('id')
         ),
-        'GeoTag' => array(
-            'columns'           => array('geo_tag_id'),
-            'refTableClass'     => 'GeoTags',
+        'Place' => array(
+            'columns'           => array('place_id'),
+            'refTableClass'     => 'Places',
             'refColumns'        => array('id')
         ),
     );
@@ -52,10 +52,10 @@ class PhotoDetails extends Yag_Db_Table
             $photoDetail->photo_id = $photo->id;            
         }
 
-        $geoTags = new GeoTags();
-        $geoTag = $geoTags->createFromExif($exif);
+        $places = new Places();
+        $place = $places->createFromExif($exif);
 
-        $photoDetail->geo_tag_id           = (null === $geoTag) ? null : $geoTag->id;
+        $photoDetail->place_id             = (null === $place) ? null : $place->id;
 		$photoDetail->file_name            = @$exif['FileName'];
 		$photoDetail->file_date_time       = @$exif['FileDateTime'];
 		$photoDetail->file_size            = @$exif['FileSize'];

@@ -18,10 +18,26 @@
  * Album form
  *
  */
-class PhotoForm extends UploadForm
+class PhotoForm extends Zend_Form
 {
 	public function __construct($options = null)
 	{
+		$this->addElementPrefixPath('Yag', 'Yag/');
+
+		parent::__construct($options);
+
+        $title = new Zend_Form_Element_Text('title');
+        $title->setLabel('Title')
+            ->setOrder(1)
+            ->setRequired(false)
+            ->addValidator('NotEmpty');
+
+        $description = new Zend_Form_Element_Text('description');
+        $description->setLabel('Description')
+            ->setOrder(2)
+            ->setRequired(false)
+            ->addValidator('NotEmpty');
+
 		$takenOn = new Zend_Form_Element_Text('taken_on');
 		$takenOn->setLabel('Taken on')
 			->setRequired(false);
@@ -32,24 +48,25 @@ class PhotoForm extends UploadForm
 			->addValidator('NotEmpty')
 			->addValidator('Int');
 
-        $albums = new Zend_Form_Element_Text('albums');
-        $albums->setLabel('Albums (Separeted by comma)')
+        $tags = new Zend_Form_Element_Text('tags');
+        $tags->setLabel('Tags (Separeted by comma)')
             ->setOrder(5)
             ->setRequired(false)
             ->addValidator('NotEmpty');
 
-		parent::__construct($options);
+        $submit = new Zend_Form_Element_Submit('submit');
+		$submit->setLabel('Save')
+		  ->setOrder(200);
 
         $this->addElements(array(
-                'id' => $id,
-                'taken_on' => $takenOn,
-                'albums' => $albums,
+                'id'          => $id,
+                'title'       => $title,
+                'description' => $description,
+                'taken_on'    => $takenOn,
+                'tags'        => $tags,
+                'submit'      => $submit,
             )
         );
-
-		$file = $this->getElement('file');
-		$file->setLabel('Upload new');
-		$file->setRequired(false);
 		
 		$this->setName('photo');
 	}

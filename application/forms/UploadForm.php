@@ -20,7 +20,7 @@
  *
  * @see http://akrabat.com/2008/05/16/simple-zend_form-file-upload-example-revisited/
  */
-class UploadForm extends Zend_Form
+class UploadPhotoForm extends Zend_Form
 {
 	public function __construct($options = null)
 	{
@@ -31,17 +31,10 @@ class UploadForm extends Zend_Form
 		$this->setName('upload');
 		$this->setAttrib('enctype', 'multipart/form-data');
 
-        $title = new Zend_Form_Element_Text('title');
-        $title->setLabel('Title')
-            ->setOrder(1)
-            ->setRequired(false)
-            ->addValidator('NotEmpty');
-
-        $description = new Zend_Form_Element_Text('description');
-        $description->setLabel('Description')
-            ->setOrder(2)
-            ->setRequired(false)
-            ->addValidator('NotEmpty');
+		$id = new Zend_Form_Element_Text('id');
+		$id->setRequired(true)
+			->addValidator('NotEmpty')
+			->addValidator('Int');
 
         $file = new Zend_Form_Element_File('file');
         $file->setLabel('File')
@@ -54,10 +47,9 @@ class UploadForm extends Zend_Form
 		  ->setOrder(200);
 
 		$this->addElements(array(
-		  'title' => $title, 
-		  'description' => $description,
-		  'file' => $file, 
-		  'submit' => $submit
+            'id'     => $id,		  
+            'file'   => $file, 
+            'submit' => $submit
         ));
 	}
 }

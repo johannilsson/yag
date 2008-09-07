@@ -58,9 +58,31 @@ class PhotoController extends Zend_Controller_Action
      */
     public function newAction()
     {
-        $form = new UploadForm();
-        $form->setAction($this->_helper->url->simple('create'));
+        $form = new NewPhotoForm();
+        $form->setAction($this->_helper->url->simple('new'));
         $this->view->form = $form;
+        
+        $formData = array();
+
+        if ($this->_request->isPost()) {
+            $formData = array(
+                'file'        => $form->getValue('file'),
+                'title'       => $this->_request->getParam('title'),
+                'description' => $this->_request->getParam('description'),
+            );
+
+            if ($form->isValid($formData)) {
+                $photos = new Photos();
+
+                $photo = $photos->createRow();
+                $photo->file        = $form->getValue('file');
+                $photo->created_on  = date('Y-m-d H:i:s', time());
+                $photo->title       = $form->getValue('title');
+                $photo->description = $form->getValue('description');
+                $photo->save();
+            }
+        }
+        $form->populate($formData);
     }
 
     /**
@@ -72,21 +94,20 @@ class PhotoController extends Zend_Controller_Action
         $photos = new Photos();
         $photo = $photos->findOne($this->getRequest()->getParam('id'));
         
-        $albumSet = $photo->findAlbumsViaAlbumsPhotosByPhoto();
-        $albumNames = array();
-        foreach ($albumSet as $album)
+        $tagSet = $photo->findTagsViaTaggedPhotosByPhoto();
+        $tagNames = array();
+        foreach ($tagSet as $tag)
         {
-           $albumNames[] = $album->name; 
+           $tagNames[] = $tag->name; 
         }
 
         $photoForm = new PhotoForm();
-        $photoForm->setDefault('albums', implode(',', $albumNames));
+        $photoForm->setDefault('tags', implode(',', $tagNames));
         $photoForm->populate($photo->toArray());
-
         $photoForm->setAction($this->_helper->url->simple('update'));
 
-        $this->view->photo     = $photo;
-        $this->view->photoForm = $photoForm;
+        $this->view->photo       = $photo;
+        $this->view->photoForm   = $photoForm;
     }
 
     /**
@@ -105,17 +126,17 @@ class PhotoController extends Zend_Controller_Action
             $formData = $this->_request->getPost();
 
             if ($photoForm->isValid($formData)) {
-                // If it is an image upload set the photo.
-                if ($photoForm->getElement('file')->getTransferAdapter()->isReceived()) {
-                    $photo->file = $photoForm->getValue('file');
-                }
-
                 $photo->taken_on    = $photoForm->getValue('taken_on');
                 $photo->title       = $photoForm->getValue('title');
                 $photo->description = $photoForm->getValue('description');
 
                 $photo->save();
-                $photos->assocciateWith($photo, explode(',', $photoForm->getValue('albums')));
+
+                // Has tags?
+                if ('' != ($tags = $photoForm->getValue('tags'))) {
+                    $taggedPhotos = new TaggedPhotos();
+                    $taggedPhotos->assocciatePhotoWith($photo, explode(',', $tags));
+                }
             }
         }
 
@@ -128,37 +149,29 @@ class PhotoController extends Zend_Controller_Action
     }
 
     /**
-     * Create a new photo.
-     *
+     * Replace one photo with antother
      */
-    public function createAction()
+    public function replaceAction()
     {
-        $form = new UploadForm();
-        $form->setAction($this->_helper->url->simple('create'));
-        $this->view->form = $form;
+        $photos = new Photos();
+        $photo = $photos->findOne(1/*$this->getRequest()->getParam('id')*/);
 
-        $formData = array();
+        $uploadForm = new UploadPhotoForm();
+        $uploadForm->setDefault('id', $photo->id);
+        $uploadForm->setAction($this->_helper->url->simple('replace'));
+        $this->view->form = $uploadForm;
 
         if ($this->_request->isPost()) {
             $formData = array(
-                'file'        => $this->_request->getParam('file'),
-                'title'       => $this->_request->getParam('title'),
-                'description' => $this->_request->getParam('description'),
+                'id'    => $this->_request->getParam('id'),
+                'file'  => $uploadForm->getValue('file'),
             );
 
-            if ($form->isValid($formData)) {
-                $photos = new Photos();
-
-                $photo = $photos->createRow();
-                $photo->file        = $form->getValue('file');
-                $photo->created_on  = date('Y-m-d H:i:s', time());
-                $photo->title       = $form->getValue('title');
-                $photo->description = $form->getValue('description');
+            if ($uploadForm->isValid($formData)) {
+                $photo->file = $uploadForm->getValue('file');
                 $photo->save();
             }
         }
-
-        $form->populate($formData);
     }
 
     /**

@@ -14,17 +14,17 @@
  */
 
 /**
- * GeoTags model
+ * Places model
  *
  */
-class GeoTags extends Yag_Db_Table
+class Places extends Yag_Db_Table
 {
     /**
      * The table name
      *
      * @var string
      */
-    protected $_name = 'geo_tags';
+    protected $_name = 'places';
 
     /**
      * primary key
@@ -41,14 +41,11 @@ class GeoTags extends Yag_Db_Table
     protected $_dependentTables = array('Photos');
 
     protected $_filters = array(
-			'*' => 'StringTrim',
+        '*' => 'StringTrim',
     );
 
     protected $_validators = array(
-        'name' => array(
-            'Alnum', 
-            'allowEmpty' => true,
-            array('StringLength', 1, 50)),
+        'name' => array('Alnum', 'allowEmpty' => true, array('StringLength', 1, 50)),
     );
 
     public function findByName($name)
@@ -57,23 +54,28 @@ class GeoTags extends Yag_Db_Table
         return $this->fetchRow($where);
     }
 
+    /**
+     * Creates a new place from exif data
+     *
+     * @param array $exif
+     */
     public function createFromExif(array $exif)
     {
         if (false === isset($exif['GPSVersion'])) {
             return null;
         }
 
-        $latitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLatitude']));
-        $longitude = new Yag_GeoCode($this->toDegreesMinutesSecondsFromExif($exif['GPSLongitude']));
+        $latitude = Yag_GeoCode::createFromExif($exif['GPSLatitude']);
+        $longitude = Yag_GeoCode::createFromExif($exif['GPSLongitude']);
         $latitudeDd = $latitude->toDecimalDegrees();
         $longitudeDd = $longitude->toDecimalDegrees();
 
-        $geoTag = null;
+        $place = null;
         try {
-            $geoTag = $this->createRow();
-            $geoTag->latitude  = sprintf('%10.6f', $latitudeDd);
-            $geoTag->longitude = sprintf('%10.6f', $longitudeDd);
-            $geoTag->save();
+            $place = $this->createRow();
+            $place->latitude  = sprintf('%10.6f', $latitudeDd);
+            $place->longitude = sprintf('%10.6f', $longitudeDd);
+            $place->save();
         } catch (Zend_Db_Statement_Exception $e) {
             preg_match('/Duplicate entry \'([0-9.]+)-([0-9.]+)\'/', $e->getMessage(), $matches);
 
@@ -84,30 +86,10 @@ class GeoTags extends Yag_Db_Table
             $select = $this->select()
                 ->where('longitude = ?', (float) $matches[1])
                 ->where('latitude = ?', (float) $matches[2]);
-            $geoTag = $this->fetchRow($select);
+            $place = $this->fetchRow($select);
         }
-        //}
 
-        return $geoTag;
+        return $place;
     }
 
-    /**
-     * Extracts and converts degrees minutes seconds from exif array.
-     *
-     * Passed data should be either the GPSLatitude or GPSLongitude array.
-     *
-     * @param array $data
-     * @return array
-     */
-    public function toDegreesMinutesSecondsFromExif(array $data)
-    {
-        $parts = array();
-        foreach ($data as $part)
-        {
-            $values = explode('/', $part);
-            $s = $values[0] / $values[1];
-            $parts[] = $s;
-        }
-        return $parts;
-    }
 }

@@ -113,7 +113,7 @@ class AtomController extends Zend_Controller_Action
                     $photo->description = $entry->content;
                     $photo->save();
                 }
-                // Set tags/ablums
+                // Set tags
                 if ('' != ($tags = $entry->{"dc:subject"})) {
                     $tags = explode(' ', $tags);
                     $photos->assocciateWith($photo, $tags);

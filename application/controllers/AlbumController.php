@@ -20,7 +20,7 @@ class AlbumController extends Zend_Controller_Action
 {
     public function init()
     {
-        $this->view->addHelperPath(dirname(__FILE__) . '../views/helpers', 'Yag_View_Helper_');
+        
     }
 
     /**
