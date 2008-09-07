@@ -8,23 +8,26 @@ CREATE TABLE `photos` (
   `description` varchar(255) default NULL,
   `taken_on` DATETIME default NULL,
   `created_on` DATETIME default NULL,
+  `updated_on` DATETIME default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-drop table geo_tags;
-CREATE TABLE `geo_tags` (
+drop table places;
+CREATE TABLE `places` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) default NULL,
   `longitude` float(10,6) default NULL,
   `latitude` float(10,6) default NULL,
+  `created_on` DATETIME default NULL,
+  `updated_on` DATETIME default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE uq_long_lati (`longitude`, `latitude`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table photo_details;
 CREATE TABLE `photo_details` (
   `photo_id` int(11) NOT NULL,
-  `geo_tag_id` int(11) NULL,
+  `place_id` int(11) NULL,
   `file_name` varchar(100) default NULL,
   `file_date_time` varchar(100) default NULL,
   `file_size` varchar(100) default NULL,
@@ -56,6 +59,22 @@ CREATE TABLE `photo_details` (
   `scene_capture_type` varchar(100) default NULL,
   `gain_control` varchar(100) default NULL,
   PRIMARY KEY  (`photo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table tags;
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) default NULL,
+  `created_on` DATETIME default NULL,  
+  `updated_on` DATETIME default NULL,  
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table tagged_photos;
+CREATE TABLE `tagged_photos` (
+  `tag_id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  PRIMARY KEY  (`tag_id`,`photo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table albums;
