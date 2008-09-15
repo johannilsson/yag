@@ -13,24 +13,40 @@
  * @license    New BSD License
  */
 
+/**
+ * Photo Model
+ */
 class Photos extends Yag_Db_Table
 {
     protected $_name = 'photos';
     protected $_primary = 'id';
 
-    protected $_dependentTables = array('AlbumsPhotos', 'PhotoDetails');
+    protected $_dependentTables = array('TaggedPhotos');
 
+    protected $_referenceMap    = array(
+        'PhotoDetail' => array(
+            'columns'           => 'id',
+            'refTableClass'     => 'PhotoDetails',
+            'refColumns'        => 'photo_id'
+        ),
+    );
+
+    /**
+     * Gem configuration
+     */
     protected $_attachment = array(
-		'column'      => 'file', 
+		'column'      => 'image', 
 		'store_path'  => PUBLIC_PATH,
         'manipulator' => 'ImageTransform',
 		'styles' => array(
+			'square' => array( 
+			     'size' => 'c75x75'),
 			'small' => array( 
-			     'width' => 200), 
+			     'size' => '250x250'), 
 			'medium' => array( 
-			     'width' => 400),
+			     'size' => '500x500'),
 			'large' => array( 
-			     'width' => 650),
+			     'size' => '1024x1024'),
         ),
     );
 
@@ -59,7 +75,7 @@ class Photos extends Yag_Db_Table
 
 		$photo = $this->createRow();
 
-		$photo->file        = $params->offsetGet('file');
+		$photo->image       = $params->offsetGet('image');
 		$photo->created_on  = date('Y-m-d H:i:s', time());
 		$photo->title       = $params->offsetGet('title');
 		$photo->description = $params->offsetGet('description');
@@ -125,7 +141,7 @@ class Photos extends Yag_Db_Table
      */
     public function readExif(Zend_Db_Table_Row_Abstract $photo)
     {
-        $exif = exif_read_data($photo->file->realPath());
+        $exif = exif_read_data($photo->image->realPath());
         return $exif;
     }
 

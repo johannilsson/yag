@@ -28,8 +28,8 @@ for ($i = 0; $i < 10; $i++)
 	{
 		foreach ($album as $image)
 		{
-			$image->getFileInfo()->getFilename();
-			$image->belongsTo();
+			echo $image->getFileInfo()->getSize() . "\n";
+			//$image->belongsTo();
 		}
 		//$album->getImage(65);
 	}

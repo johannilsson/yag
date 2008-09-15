@@ -61,7 +61,7 @@ class PhotoController extends Zend_Controller_Action
         $form = new NewPhotoForm();
         $form->setAction($this->_helper->url->simple('new'));
         $this->view->form = $form;
-        
+
         $formData = array();
 
         if ($this->_request->isPost()) {
@@ -75,7 +75,7 @@ class PhotoController extends Zend_Controller_Action
                 $photos = new Photos();
 
                 $photo = $photos->createRow();
-                $photo->file        = $form->getValue('file');
+                $photo->image        = $form->getValue('file1');
                 $photo->created_on  = date('Y-m-d H:i:s', time());
                 $photo->title       = $form->getValue('title');
                 $photo->description = $form->getValue('description');
@@ -154,7 +154,7 @@ class PhotoController extends Zend_Controller_Action
     public function replaceAction()
     {
         $photos = new Photos();
-        $photo = $photos->findOne(1/*$this->getRequest()->getParam('id')*/);
+        $photo = $photos->findOne($this->getRequest()->getParam('id'));
 
         $uploadForm = new UploadPhotoForm();
         $uploadForm->setDefault('id', $photo->id);
@@ -168,10 +168,11 @@ class PhotoController extends Zend_Controller_Action
             );
 
             if ($uploadForm->isValid($formData)) {
-                $photo->file = $uploadForm->getValue('file');
+                $photo->image = $uploadForm->getValue('file');
                 $photo->save();
             }
         }
+        $this->view->photo = $photo;
     }
 
     /**
@@ -202,21 +203,8 @@ class PhotoController extends Zend_Controller_Action
         $photos = new Photos();
 
         $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
+        $details = $photo->findParentRow('PhotoDetails');
 
-        $details = $longitude = $latitude = null;
-        $detailSet = $photo->findPhotoDetailsByPhoto();
-        if (1 == count($detailSet)) {
-            $details = $detailSet->getRow(0);
-
-            if (null !== $details->place_id 
-            && null !== ($place = $details->findParentRow('Places'))) {
-                $latitude = new Yag_GeoCode($place->latitude);
-                $longitude = new Yag_GeoCode($place->longitude);
-            }
-        }
-
-        $this->view->longitude  = $longitude;
-        $this->view->latitude   = $latitude;
         $this->view->details    = $details;
         $this->view->photo      = $photo; 
     }
@@ -237,4 +225,18 @@ class PhotoController extends Zend_Controller_Action
         $this->view->previous = $photos->getNeighbour($current, 'previous');
         $this->view->next     = $photos->getNeighbour($current, 'next');
     }
+
+    public function rebuildAction()
+    {
+        set_time_limit(0);
+        $photos = new Photos();
+        foreach($photos->fetchAll() as $photo) 
+        {
+	        echo 'Appling manipulation: ' . $photo->id . "\n";
+            $photo->image->applyManipulations();
+        }
+
+        die('done');
+    }
+
 }

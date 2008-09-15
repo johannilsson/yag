@@ -23,19 +23,17 @@ class PhotoDetails extends Yag_Db_Table
     protected $_primary = 'photo_id';
     protected $_sequence = false;
 
+    protected $_dependentTables = array('Photos');
+
+/*
     protected $_referenceMap = array(
         'Photo' => array(
             'columns'           => array('photo_id'),
             'refTableClass'     => 'Photos',
             'refColumns'        => array('id')
         ),
-        'Place' => array(
-            'columns'           => array('place_id'),
-            'refTableClass'     => 'Places',
-            'refColumns'        => array('id')
-        ),
     );
-
+*/
     /**
      * Creates or updates from exif data, will also try to create a GeoTag row
      * if possible.
@@ -52,14 +50,6 @@ class PhotoDetails extends Yag_Db_Table
             $photoDetail->photo_id = $photo->id;            
         }
 
-        $places = new Places();
-        $place = $places->createFromExif($exif);
-
-        $photoDetail->place_id             = (null === $place) ? null : $place->id;
-		$photoDetail->file_name            = @$exif['FileName'];
-		$photoDetail->file_date_time       = @$exif['FileDateTime'];
-		$photoDetail->file_size            = @$exif['FileSize'];
-		$photoDetail->mime_type            = @$exif['MimeType'];
 		$photoDetail->make                 = @$exif['Make'];
 		$photoDetail->model                = @$exif['Model'];
 		$photoDetail->orientation          = @$exif['Orientation'];
@@ -72,14 +62,21 @@ class PhotoDetails extends Yag_Db_Table
 		$photoDetail->aperture_value       = @$exif['ApertureValue'];
 		$photoDetail->light_source         = @$exif['LightSource'];
 		$photoDetail->flash                = @$exif['Flash'];
-		$photoDetail->image_width          = @$exif['ExifImageWidth'];
-		$photoDetail->image_length         = @$exif['ExifImageLength'];
 		$photoDetail->exposure_mode        = @$exif['ExposureMode'];
 		$photoDetail->white_balance        = @$exif['WhiteBalance'];
 		$photoDetail->digital_zoom_ratio   = @$exif['DigitalZoomRatio'];
 		$photoDetail->scene_capture_type   = @$exif['SceneCaptureType'];
 		$photoDetail->gain_control         = @$exif['GainControl'];
-        
+
+        // Add lon and lat data if available
+        if (true === isset($exif['GPSVersion'])) {
+            $latitude = Yag_GeoCode::createFromExif($exif['GPSLatitude']);
+            $longitude = Yag_GeoCode::createFromExif($exif['GPSLongitude']);
+
+            $photoDetail->latitude  = $latitude->toDecimalDegrees();
+            $photoDetail->longitude = $longitude->toDecimalDegrees();
+        }
+
         $photoDetail->save();
 
         return $photoDetail;

@@ -24,7 +24,7 @@ class Yag_Db_Table_Plugin_ExtractExif extends Zend_Db_Table_Plugin_Abstract
 
     public function preSaveRow(Zend_Db_Table_Row_Abstract $photo)
     {
-        $this->_extractExif = $photo->isModified('file');
+        $this->_extractExif = $photo->isModified('image');
     }
 
     /**

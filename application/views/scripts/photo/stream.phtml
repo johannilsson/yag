@@ -1,11 +1,11 @@
 <ul class="album">
     <?php if ($this->next instanceof Zend_Db_Table_Row_Abstract):?>
-    <li><a href="<?php echo $this->url(array('id' => $this->next->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->next, 'style' => 'small')) ?></a></li>
+    <li><a href="<?php echo $this->url(array('id' => $this->next->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->next, 'style' => 'square')) ?></a></li>
     <?php else:?>
     <li>This is the last photo</li>
     <?php endif; ?>
     <?php if ($this->previous instanceof Zend_Db_Table_Row_Abstract):?>
-    <li><a href="<?php echo $this->url(array('id' => $this->previous->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->previous, 'style' => 'small')) ?></a></li>
+    <li><a href="<?php echo $this->url(array('id' => $this->previous->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->previous, 'style' => 'square')) ?></a></li>
     <?php else:?>
     <li>No item</li>
     <?php endif; ?>

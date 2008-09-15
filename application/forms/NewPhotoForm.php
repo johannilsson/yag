@@ -43,12 +43,42 @@ class NewPhotoForm extends Zend_Form
             ->setRequired(false)
             ->addValidator('NotEmpty');
 
-        $file = new Zend_Form_Element_File('file');
-        $file->setLabel('File')
-          ->setOrder(100)
+        $file1 = new Zend_Form_Element_File('file1');
+        $file1->setLabel('1')
+          ->setOrder(101)
+          ->setRequired(true)
+          ->addValidator('NotEmpty');
+/*
+        $file2 = new Zend_Form_Element_File('file2');
+        $file2->setLabel('2')
+          ->setOrder(102)
           ->setRequired(true)
           ->addValidator('NotEmpty');
 
+        $file3 = new Zend_Form_Element_File('file3');
+        $file3->setLabel('3')
+          ->setOrder(103)
+          ->setRequired(true)
+          ->addValidator('NotEmpty');
+
+        $file4 = new Zend_Form_Element_File('file4');
+        $file4->setLabel('4')
+          ->setOrder(104)
+          ->setRequired(true)
+          ->addValidator('NotEmpty');
+
+        $file5 = new Zend_Form_Element_File('file5');
+        $file5->setLabel('5')
+          ->setOrder(105)
+          ->setRequired(true)
+          ->addValidator('NotEmpty');
+
+        $file6 = new Zend_Form_Element_File('file6');
+        $file6->setLabel('6')
+          ->setOrder(106)
+          ->setRequired(true)
+          ->addValidator('NotEmpty');
+*/
         $submit = new Zend_Form_Element_Submit('submit');
 		$submit->setLabel('Upload')
 		  ->setOrder(200);
@@ -56,7 +86,12 @@ class NewPhotoForm extends Zend_Form
 		$this->addElements(array(
 		  'title' => $title, 
 		  'description' => $description,
-		  'file' => $file, 
+		  'file1' => $file1,
+/*		  'file2' => $file2, 
+		  'file3' => $file3,
+ 		  'file4' => $file4,
+ 		  'file5' => $file5,
+ 		  'file6' => $file6,*/
 		  'submit' => $submit
         ));
 	}

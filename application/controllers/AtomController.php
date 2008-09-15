@@ -121,7 +121,7 @@ class AtomController extends Zend_Controller_Action
             } else if ('' != $entry->content()) {
 	            $file = $photos->createTmpFile(base64_decode($entry->content()));
 	            $params = array(
-	                'file'         => $file,
+	                'image'         => $file,
 	                'title'        => $entry->title,
 	                'description'  => '',
 	            );
