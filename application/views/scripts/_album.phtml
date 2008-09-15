@@ -1,7 +1,11 @@
-<ul class="album">
-<?php foreach ($this->paginator as $photo): ?>
-	<li><a href="<?php echo $this->url(array('id' => $photo->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small')) ?></a></li>
-<?php endforeach; ?>
-</ul>
-
-<?php echo $this->paginationControl($this->paginator)?>
+<div class="album">
+    <ul>
+    <?php foreach ($this->photos as $photo): ?>
+	    <li>
+	        <h4><?php echo $photo->title ?></h4>
+	        <p><a href="<?php echo $this->url(array('id' => $photo->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small')) ?></a></p>
+	        <p><?php echo $photo->description ?></p>
+	    </li>
+    <?php endforeach; ?>
+    </ul>
+</div>

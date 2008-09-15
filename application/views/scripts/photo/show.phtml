@@ -4,25 +4,6 @@
 <?php echo $this->action('stream', 'photo', null, array('id' => $this->photo->id)); ?> 
 </div>
 <div class="photo">
-    <?php echo $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'large')) ?>
+    <?php echo $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'medium')) ?>
 </div>
-<div class="photo-details">
-<p><?php echo $this->photo->description ?></p>
-<dl>
-    <dt>Taken on</dt>
-    <dd><?= $this->photo->taken_on ?></dd>
-    <dt>Camera</dt>
-    <dd><?= $this->details->make?> <?= $this->details->model?></dd>
-    <dt>Exposure</dt>
-    <dd><?= $this->details->exposure_time ?></dd>
-    <dt>Aperature</dt>
-    <dd><?= $this->details->aperture_value ?></dd>
-    <dt>Focal Length</dt>
-    <dd><?= $this->details->f_number ?></dd>
-    <dt>ISO Speed</dt>
-    <dd><?= $this->details->iso_speed_ratings ?></dd>
-    <dt>Shutter Speed</dt>
-    <dd><?= $this->details->shutter_speed_value ?></dd>    
-</dl>
-<?php echo $this->partial('_map_link.phtml', array('longitude' => $this->longitude, 'latitude' => $this->latitude))?>
-</div>
+

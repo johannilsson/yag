@@ -1,4 +1,4 @@
-<ul class="album">
+<ul>
     <?php if ($this->next instanceof Zend_Db_Table_Row_Abstract):?>
     <li><a href="<?php echo $this->url(array('id' => $this->next->id), 'photo'); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->next, 'style' => 'square')) ?></a></li>
     <?php else:?>
