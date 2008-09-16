@@ -140,12 +140,7 @@ class PhotoController extends Zend_Controller_Action
             }
         }
 
-        $photoForm->populate($formData);
-
-        $this->view->photoForm = $photoForm;
-        $this->view->photo     = $photo;
-
-        $this->render('edit');
+        $this->_redirect($this->_helper->url('edit', null, null, array('id' => $this->getRequest()->getParam('id'))));
     }
 
     /**
@@ -186,7 +181,7 @@ class PhotoController extends Zend_Controller_Action
         $photoSet = $photos->fetchAll($photos->select()->order('created_on desc'));
 
         $paginator  = Zend_Paginator::factory($photoSet);
-        $paginator->setItemCountPerPage(5)
+        $paginator->setItemCountPerPage(6)
             ->setPageRange(8)
             ->setCurrentPageNumber($this->_getParam('page'));
 
@@ -203,10 +198,12 @@ class PhotoController extends Zend_Controller_Action
         $photos = new Photos();
 
         $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
-        $details = $photo->findParentRow('PhotoDetails');
+        //$details = $photo->findParentRow('PhotoDetails');
+        $tags = $photo->findTagsViaTaggedPhotosByPhoto();
 
-        $this->view->details    = $details;
-        $this->view->photo      = $photo; 
+        //$this->view->details    = $details;
+        $this->view->photo  = $photo;
+        $this->view->tags   = $tags;
     }
 
     /**
