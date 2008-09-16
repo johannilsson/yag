@@ -4,3 +4,4 @@
 <p><a href="<?php echo $this->url(array('controller' => 'photo', 'action' => 'replace', 'id' => $this->photo->id)); ?>">Replace photo</a></p>
 <?php echo $this->photoForm ;?>
 
+<?php echo $this->action('stream', 'photo', null, array('id' => $this->photo->id)); ?> 

@@ -8,6 +8,8 @@ a {
 	color: #7D9EC0;
 }
 
+a img { border: none; }
+
 body {
 	background-color: #fff;
 	color: #000;
@@ -17,8 +19,9 @@ body {
 }
 
 h2 {
+    font-size: 1.5em;
 	margin: 1em;
-	}
+}
 
 #main {
 	width:900px;
@@ -27,19 +30,60 @@ h2 {
 	position:relative;
 }
 
-#content-nav {
-	float: left;
-	width: 250px;
+#content {
+    float: left;
 }
 
+#sidebar {
+    width: 300px;
+    float: right;
+    /*background-color: #ff2;*/
+}
 
-.album { clear: both; overflow: hidden;}
-.album ul { list-style: none; margin: 0; padding: 0; }
-.album li { float: left; height: 260px; padding: 10px; text-align: left; width: 260px; }
-/*.album li:hover { background: #ddd; }*/
-.album h4 { overflow: hidden; }
-.album p { margin: 0; font-size: small; }
-.album img { border: none; }
+.photo h2 {
+    margin: 0 1em 1em 0;
+}
+
+.stream {
+    clear: both; 
+    overflow: hidden;
+}
+ul.stream { 
+    list-style: none; 
+    margin: 0; 
+    padding: 0; 
+}
+ul.stream li { 
+    float: left; 
+    padding: 10px; 
+    height: 75px; 
+    width: 75px;
+    font-size: small; 
+}
+
+.album { 
+    clear: both; 
+    overflow: hidden;
+}
+.album ul { 
+    list-style: none; 
+    margin: 0; 
+    padding: 0; 
+}
+.album li { 
+    float: left; 
+    height: 260px; 
+    width: 260px; 
+    padding: 10px; 
+    text-align: left; 
+}
+.album h4 { 
+    overflow: hidden; 
+}
+.album p { 
+    margin: 0; font-size: small; 
+}
+
 
 div.pagination-control {
 	padding: 10px;

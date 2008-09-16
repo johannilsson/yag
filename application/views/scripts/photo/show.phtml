@@ -1,9 +1,20 @@
-<h2><?php echo $this->photo->title ?></h2>
-
-<div class="stream">
-<?php echo $this->action('stream', 'photo', null, array('id' => $this->photo->id)); ?> 
+<div id="content">
+    <div class="photo">
+        <h2><?php echo $this->photo->title ?></h2>
+        <p><?php echo $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'medium')) ?></p>
+        <p><?php echo $this->photo->description ?></p>
+    </div>
 </div>
-<div class="photo">
-    <?php echo $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'medium')) ?>
-</div>
 
+<div id="sidebar">
+    <?php echo $this->action('stream', 'photo', null, array('id' => $this->photo->id)); ?> 
+
+    <h4>Tags</h4>
+    <?php if (count($this->tags) > 0) :?>
+    <ul>
+    <?php foreach ($this->tags as $tag) :?>
+        <li><a href="<?php echo $this->url(array('name' => $tag->name), 'tags-name'); ?>"><?php echo $tag->name ?></a></li>
+    <?php endforeach;?>
+    </ul>
+    <?php endif;?>
+</div>
