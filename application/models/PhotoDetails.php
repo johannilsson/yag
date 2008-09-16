@@ -25,15 +25,6 @@ class PhotoDetails extends Yag_Db_Table
 
     protected $_dependentTables = array('Photos');
 
-/*
-    protected $_referenceMap = array(
-        'Photo' => array(
-            'columns'           => array('photo_id'),
-            'refTableClass'     => 'Photos',
-            'refColumns'        => array('id')
-        ),
-    );
-*/
     /**
      * Creates or updates from exif data, will also try to create a GeoTag row
      * if possible.
