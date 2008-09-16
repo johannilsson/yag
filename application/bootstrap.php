@@ -80,6 +80,15 @@ $route = new Zend_Controller_Router_Route(
 );
 $router->addRoute('photo', $route);
 
+$route = new Zend_Controller_Router_Route(
+    'tags/show/:name',
+    array(
+        'controller' => 'tags',
+        'action'     => 'show'
+    )
+);
+$router->addRoute('tags-name', $route);
+
 //$router->removeDefaultRoutes();
 //$router->addConfig($routeConfig, 'routes');
 
