@@ -42,7 +42,7 @@ class Photos extends Yag_Db_Table
 			'square' => array( 
 			     'size' => 'c75x75'),
 			'small' => array( 
-			     'size' => '250x250'), 
+			     'size' => '240x240'), 
 			'medium' => array( 
 			     'size' => '500x500'),
 			'large' => array( 
