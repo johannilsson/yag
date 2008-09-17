@@ -83,39 +83,6 @@ class Photos extends Yag_Db_Table
 
 		return $photo;
     }
-    
-    /**
-     * Assocciates this photo with supplied albums, if albums does not exists 
-     * they will be created.
-     *
-     * @param Zend_Db_Row $photo
-     * @param array $albumNames
-     */
-    public function assocciateWith($photo, array $albumNames)
-    {
-        $albums = new Albums();
-        $albumsPhotos = new AlbumsPhotos();
-        $albumsPhotos->deleteByPhotoId($photo->id);
-
-        foreach ($albumNames as $albumName) {
-            if ($albumName == '') {
-                continue; // skip bogus names in array.
-            }
-            $album = $albums->findByName(trim($albumName));
-
-            if (null == $album) {
-                $album = $albums->createRow();
-                $album->name = (string)$albumName;
-                $album->save();
-            }
-
-            $albumPhoto = $albumsPhotos->createRow(array(
-                'album_id' => $album->id, 
-                'photo_id' => $photo->id)
-            );
-            $albumPhoto->save();
-        }
-    }
 
     /**
      * Creates a temporary file.
@@ -143,6 +110,40 @@ class Photos extends Yag_Db_Table
     {
         $exif = exif_read_data($photo->image->realPath());
         return $exif;
+    }
+
+    /**
+     *
+     * @param Zend_Db_Table_Row_Abstract $photo
+     * @param array $exif
+     * @return Zend_Db_Table_Row_Abstract
+     */
+    public function addExif(Zend_Db_Table_Row_Abstract $photo, array $exif)
+    {
+		$photo->make                 = @$exif['Make'];
+		$photo->model                = @$exif['Model'];
+		$photo->exposure             = @$exif['ExposureTime'];
+		$photo->focal_length         = @$exif['FNumber'];
+		$photo->iso_speed            = @$exif['ISOSpeedRatings'];
+		$photo->taken_on             = @$exif['DateTimeOriginal'];
+		$photo->shutter_speed        = @$exif['ShutterSpeedValue'];
+		$photo->aperture             = @$exif['ApertureValue'];
+		$photo->flash                = @$exif['Flash'];
+		$photo->exposure             = @$exif['ExposureMode'];
+		$photo->white_balance        = @$exif['WhiteBalance'];
+
+        // Add lon and lat data if available
+        if (true === isset($exif['GPSVersion'])) {
+            $latitude = Yag_GeoCode::createFromExif($exif['GPSLatitude']);
+            $longitude = Yag_GeoCode::createFromExif($exif['GPSLongitude']);
+
+            $photo->latitude  = $latitude->toDecimalDegrees();
+            $photo->longitude = $longitude->toDecimalDegrees();
+        }
+
+        $photo->save();
+
+        return $photo;
     }
 
     /**
