@@ -9,12 +9,14 @@
 <div id="sidebar">
     <?php echo $this->action('stream', 'photo', null, array('id' => $this->photo->id)); ?> 
 
-    <h4>Tags</h4>
     <?php if (count($this->tags) > 0) :?>
+    <h4>Tags</h4>
     <ul>
     <?php foreach ($this->tags as $tag) :?>
         <li><a href="<?php echo $this->url(array('name' => $tag->name), 'tags-name'); ?>"><?php echo $tag->name ?></a></li>
     <?php endforeach;?>
     </ul>
     <?php endif;?>
+
+    <?php echo $this->partial('_map.phtml', array('photo' => $this->photo));?>
 </div>
