@@ -198,10 +198,8 @@ class PhotoController extends Zend_Controller_Action
         $photos = new Photos();
 
         $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
-        //$details = $photo->findParentRow('PhotoDetails');
         $tags = $photo->findTagsViaTaggedPhotosByPhoto();
 
-        //$this->view->details    = $details;
         $this->view->photo  = $photo;
         $this->view->tags   = $tags;
     }
