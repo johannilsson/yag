@@ -41,8 +41,6 @@ class Yag_Db_Table_Plugin_ExtractExif extends Zend_Db_Table_Plugin_Abstract
         }
 
         $exif = $photo->getTable()->readExif($photo);
-
-        $photoDetails = new PhotoDetails();
-        $photoDetails->createFromExif($photo, $exif);
+        $photo->getTable()->addExif($photo, $exif);
     }
 }
