@@ -37,18 +37,12 @@ $config = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/atom.ini', 'pr
 Zend_Registry::set('atom-config', $config);
 $authConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth.ini', 'production');
 Zend_Registry::set('auth-config', $authConfig);
-
+$authIdentitiesConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth-identities.ini', 'production');
+Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
 /*
  * Date settings
  */
 date_default_timezone_set('UTC');
-
-//Zend_Db_Table_Plugin_Broker::addPrefixPath('Ma_Plugin', 'Ma/Plugin');  
-
-$layoutOptions = array(
-    'layout'     => 'standard',
-    'layoutPath' => dirname(__FILE__) . '/views/layouts',
-);
 
 $partial = '_search_pagination_control.phtml';
 Zend_View_Helper_PaginationControl::setDefaultViewPartial($partial);
@@ -62,13 +56,16 @@ $db = Zend_Db::factory($dsConfig->db);
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
 
+
+$layoutOptions = array(
+    'layout'     => 'standard',
+    'layoutPath' => dirname(__FILE__) . '/views/layouts',
+);
 $layout = Zend_Layout::startMvc($layoutOptions);
 
 $front = Zend_Controller_Front::getInstance();
 
 $router = $front->getRouter();
-//$router->addRoute('show-album', new Zend_Controller_Router_Route('album/:name', array('controller' => 'album', 'action' => 'show')));
-//$router->addRoute('showphoto', new Zend_Controller_Router_Route('photo/:id', array('controller' => 'photo', 'action' => 'show')));
 
 $route = new Zend_Controller_Router_Route(
     'photo/:id',
@@ -89,7 +86,6 @@ $route = new Zend_Controller_Router_Route(
 );
 $router->addRoute('tags-name', $route);
 
-//$router->removeDefaultRoutes();
 //$router->addConfig($routeConfig, 'routes');
 
 /*
@@ -106,4 +102,8 @@ ini_set('error_log', dirname(__FILE__) . '../logs/php_error_log');
  */
 $front->registerPlugin(new Yag_Controller_Plugin_Auth($authConfig));
 
+/*
+ * And run
+ */
 $front->run(dirname(__FILE__) . '/controllers');
+

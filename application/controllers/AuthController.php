@@ -77,9 +77,9 @@ class AuthController extends Zend_Controller_Action
             $openIdAdapter = new Zend_Auth_Adapter_OpenId();
             $result = $auth->authenticate($openIdAdapter);
             $config = Zend_Registry::get('auth-config');
-            // Quick fix for checking identity against conf, 
+            $identities = Zend_Registry::get('auth-identities-config');
             // TODO: fix proper error message for this.
-            if ($result->isValid() && in_array($result->getIdentity(), $config->auth->login->identities->toArray())) {
+            if ($result->isValid() && in_array($result->getIdentity(), $identities->auth->identities->toArray())) {
                 $auth->getStorage()->write($result->getIdentity());
                 $this->_redirect($this->_helper->url->simple(
                     $config->auth->login->welcome->action, 
