@@ -18,6 +18,11 @@ body {
 	font-family: sans-serif, verdana;
 }
 
+h1 {
+    font-size: 1.5em;
+	margin: 1em 0;
+}
+
 h2 {
     font-size: 1.5em;
 	margin: 1em;
