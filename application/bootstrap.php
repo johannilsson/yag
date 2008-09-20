@@ -68,6 +68,15 @@ $front = Zend_Controller_Front::getInstance();
 $router = $front->getRouter();
 
 $route = new Zend_Controller_Router_Route(
+    'photo',
+    array(
+        'controller' => 'photo',
+        'action'     => 'index'
+    )
+);
+$router->addRoute('photos', $route);
+
+$route = new Zend_Controller_Router_Route(
     'photo/:id',
     array(
         'controller' => 'photo',
