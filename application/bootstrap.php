@@ -17,7 +17,7 @@
  * Set include path
  */
 $includePath = array(
-	dirname(__FILE__) . '/../library',
+	dirname(__FILE__) . '/library',
 	dirname(__FILE__) . '/models', 
 	dirname(__FILE__) . '/forms',
 	dirname(__FILE__) . '/views/helpers',
@@ -68,7 +68,7 @@ $front = Zend_Controller_Front::getInstance();
 $router = $front->getRouter();
 
 $route = new Zend_Controller_Router_Route(
-    'photo',
+    'photo/',
     array(
         'controller' => 'photo',
         'action'     => 'index'
@@ -77,7 +77,7 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('photos', $route);
 
 $route = new Zend_Controller_Router_Route(
-    'photo/:id',
+    'photo/:id/',
     array(
         'controller' => 'photo',
         'action'     => 'show'
@@ -87,7 +87,7 @@ $route = new Zend_Controller_Router_Route(
 $router->addRoute('photo', $route);
 
 $route = new Zend_Controller_Router_Route(
-    'tags/show/:name',
+    'tags/show/:name/',
     array(
         'controller' => 'tags',
         'action'     => 'show'
