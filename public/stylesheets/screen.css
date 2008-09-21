@@ -28,6 +28,10 @@ h2 {
 	margin: 1em;
 }
 
+td, th {
+    padding: 0.5em;
+}
+
 #main {
 	width:900px;
 	margin:20px auto 0px auto;
