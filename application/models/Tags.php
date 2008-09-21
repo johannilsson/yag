@@ -85,7 +85,7 @@ class Tags extends Yag_Db_Table
                 $tag = $this->findByName($tagName);
                 if (!$tag instanceof App_Db_Table_Row) {
                     $tag = $this->createRow();
-                    $tag->name = $tagName;
+                    $tag->name = trim($tagName);
                     $tag->save();
                 }
                 $tags[] = $tag;
