@@ -34,7 +34,7 @@ class Photos extends Yag_Db_Table
     /**
      * Gem configuration
      */
-    protected $_attachment = array(
+    public $attachment = array(
 		'column'      => 'image', 
 		'store_path'  => PUBLIC_PATH,
         'manipulator' => 'ImageTransform',
@@ -56,11 +56,11 @@ class Photos extends Yag_Db_Table
      */
     protected function _setupPlugins()
     {
-        $attachment = new Gem_Db_Table_Plugin_Attachment($this->_attachment);
-        $extractExif = new Yag_Db_Table_Plugin_ExtractExif();
+        $attachmentPlugin = new Gem_Db_Table_Plugin_Attachment($this->attachment);
+        $extractExifPlugin = new Yag_Db_Table_Plugin_ExtractExif();
 
-        $this->addPlugin($attachment);
-        $this->addPlugin($extractExif);
+        $this->addPlugin($attachmentPlugin);
+        $this->addPlugin($extractExifPlugin);
     }
 
     /**
@@ -76,7 +76,7 @@ class Photos extends Yag_Db_Table
 		$photo = $this->createRow();
 
 		$photo->image       = $params->offsetGet('image');
-		$photo->created_on  = date('Y-m-d H:i:s', time());
+		$photo->created_on  = $params->offsetExists('created_on') ? $params->offsetGet('created_on') : date('Y-m-d H:i:s', time());
 		$photo->title       = $params->offsetGet('title');
 		$photo->description = $params->offsetGet('description');
 		$photo->save();
