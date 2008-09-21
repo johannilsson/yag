@@ -90,13 +90,10 @@ class AtomController extends Zend_Controller_Action
      */
     public function uploadAction()
     {
-        try
-        {
+        try {
             $this->_helper->viewRenderer->setNoRender();
             $feed = Zend_Feed::importString($this->_request->getRawBody());
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $this->_response->setHttpResponseCode(400); // 415 unsuported media?
             $this->_response->setHeader('Status', '400 Unable to read feed', true);
             $this->view->errorMessages = array('Unable to read feed');
@@ -116,14 +113,15 @@ class AtomController extends Zend_Controller_Action
                 // Set tags
                 if ('' != ($tags = $entry->{"dc:subject"})) {
                     $taggedPhotos = new TaggedPhotos();
-                    $taggedPhotos->assocciatePhotoWith($photo, explode(',', $tags));
+                    $taggedPhotos->assocciatePhotoWith($photo, explode(' ', $tags));
                 }
             } else if ('' != $entry->content()) {
 	            $file = $photos->createTmpFile(base64_decode($entry->content()));
 	            $params = array(
 	                'image'         => $file,
-	                'title'        => $entry->title,
-	                'description'  => '',
+	                'title'         => $entry->title,
+	                'created_on'    => $entry->issued,
+	                'description'   => '',
 	            );
 	            $photo = $photos->createPhoto($params);
             } else {
