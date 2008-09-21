@@ -75,14 +75,16 @@ class TaggedPhotos extends Yag_Db_Table
 
         $assoccTags = array();
         foreach ($tagNames as $name) {
+            $name = trim($name); // TODO: should be fixed by a filter automagic
             if ($name == '') {
                 continue; // skip bogus names in array.
             }
-            $tag = $tags->findByName(trim($name));
+            $tag = $tags->findByName($name);
 
             if (null == $tag) {
                 $tag = $tags->createRow();
                 $tag->name = (string) $name;
+                $tag->created_on = date('Y-m-d H:i:s'); // TODO: Should be handle behind
                 $tag->save();
             }
 
