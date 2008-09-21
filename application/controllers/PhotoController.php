@@ -75,7 +75,7 @@ class PhotoController extends Zend_Controller_Action
                 $photos = new Photos();
 
                 $photo = $photos->createRow();
-                $photo->image        = $form->getValue('file1');
+                $photo->image       = new ArrayObject($_FILES['file1']); // TODO: the file transfer is a bit buggy to stick with this for now
                 $photo->created_on  = date('Y-m-d H:i:s', time());
                 $photo->title       = $form->getValue('title');
                 $photo->description = $form->getValue('description');
@@ -163,7 +163,7 @@ class PhotoController extends Zend_Controller_Action
             );
 
             if ($uploadForm->isValid($formData)) {
-                $photo->image = $uploadForm->getValue('file');
+                $photo->image = new ArrayObject($_FILES['file']); // TODO: the file transfer is a bit buggy to stick with this for now
                 $photo->save();
             }
         }
@@ -198,8 +198,11 @@ class PhotoController extends Zend_Controller_Action
         $photos = new Photos();
 
         $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
-        $tags = $photo->findTagsViaTaggedPhotosByPhoto();
+        if (null === $photo) {
+            throw new RuntimeException('Photo does not exists');
+        }
 
+        $tags = $photo->findTagsViaTaggedPhotosByPhoto();
         $this->view->photo  = $photo;
         $this->view->tags   = $tags;
     }
@@ -221,17 +224,22 @@ class PhotoController extends Zend_Controller_Action
         $this->view->next     = $photos->getNeighbour($current, 'next');
     }
 
-    public function rebuildAction()
+    public function deleteAction()
     {
-        set_time_limit(0);
-        $photos = new Photos();
-        foreach($photos->fetchAll() as $photo) 
-        {
-	        echo 'Appling manipulation: ' . $photo->id . "\n";
-            $photo->image->applyManipulations();
-        }
+        $id = (int) $this->getRequest()->getParam('id');
 
-        die('done');
+        $photoModel = new Photos();
+        $photo = $photoModel->fetchRow($photoModel->select()->where('id = ?', $id));
+        if (null === $photo) {
+            $this->view->message = 'Photo does not exists';
+            return;
+        }
+        try {
+            $photo->delete();
+            $this->view->message = 'Photo does not exists';
+        } catch (Exception $e) {
+            $this->view->message = 'Could not delete ' . $e->getMessage();
+        }
     }
 
 }
