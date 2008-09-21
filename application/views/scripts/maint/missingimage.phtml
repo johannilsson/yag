@@ -1,0 +1,19 @@
+<h2>Missing Images</h2>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Actions</th>
+    </tr>
+    <?php foreach ($this->photos as $photo):?>
+    <tr>
+        <td><?php echo $photo->id ?></td>
+        <td><?php echo $photo->title ?></td>
+        <td>
+        <a href="<?php echo $this->url(array('controller' => 'maint', 'action' => 'manipulate', 'id' => $photo->id)); ?>">Apply manipulations</a> | 
+        <a href="<?php echo $this->url(array('controller' => 'photo', 'action' => 'replace', 'id' => $photo->id)); ?>">Replace photo</a> | 
+        <a href="<?php echo $this->url(array('controller' => 'photo', 'action' => 'delete', 'id' => $photo->id)); ?>">Delete photo</a>
+        </td>
+    </tr>
+    <?php endforeach;?>
+</table>
