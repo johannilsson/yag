@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="yag" default="dist" basedir=".">
+    <description>
+        yag build file
+    </description>
+
+    <property name="dist.dir" location="dist"/>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="dist" depends="init"
+        description="generate the distribution" >
+
+        <copy todir="${dist.dir}/application">
+            <fileset dir="application">
+                <exclude name="**/blueprint/**"/>
+            </fileset>
+        </copy>
+        <copy todir="${dist.dir}/public">
+            <fileset dir="public">
+                <exclude name="*photos/**"/>
+            </fileset>
+        </copy>
+
+        <filter filtersfile="deploy_env.properties"/>    
+        <copy todir="${dist.dir}/application/configuration" filtering="true">
+            <fileset dir="application/configuration/blueprint/">
+                <include name="**/*.ini"/>
+            </fileset>
+        </copy>
+
+    </target>
+
+    <target name="clean"
+        description="clean up" >
+        <delete dir="${dist.dir}"/>
+    </target>
+</project>
+
