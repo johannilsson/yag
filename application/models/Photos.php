@@ -35,18 +35,19 @@ class Photos extends Yag_Db_Table
      * Gem configuration
      */
     public $attachment = array(
-		'column'      => 'image', 
-		'store_path'  => PUBLIC_PATH,
-        'manipulator' => 'ImageTransform',
+		'column'        => 'image', 
+		'store_path'    => PUBLIC_PATH,
+		'store_target'  => ':model/:year/:month/:day/:id',
+        'manipulator' => 'Thumbnail',
 		'styles' => array(
 			'square' => array( 
-			     'size' => 'c75x75'),
+			     'geometry' => 'c75x75'),
 			'small' => array( 
-			     'size' => '240x240'), 
+			     'geometry' => '240x240'), 
 			'medium' => array( 
-			     'size' => '500x500'),
+			     'geometry' => '500x500'),
 			'large' => array( 
-			     'size' => '1024x1024'),
+			     'geometry' => '1024x1024'),
         ),
     );
 
