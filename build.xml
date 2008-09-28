@@ -32,5 +32,16 @@
         description="clean up" >
         <delete dir="${dist.dir}"/>
     </target>
+
+    <target name="package" depends="clean,dist"
+        description="package" >
+        <tar longfile="gnu"
+             destfile="${dist.dir}/yag.tar" >
+            <tarfileset dir="${dist.dir}">
+                <include name="**/**"/>
+            </tarfileset>
+        </tar>
+        <gzip zipfile="${dist.dir}/yag.tar.gz" src="${dist.dir}/yag.tar"/>
+    </target>
 </project>
 
