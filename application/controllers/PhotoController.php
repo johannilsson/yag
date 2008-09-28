@@ -236,7 +236,7 @@ class PhotoController extends Zend_Controller_Action
         }
         try {
             $photo->delete();
-            $this->view->message = 'Photo does not exists';
+            $this->view->message = 'Photo deleted';
         } catch (Exception $e) {
             $this->view->message = 'Could not delete ' . $e->getMessage();
         }
