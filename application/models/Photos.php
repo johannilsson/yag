@@ -37,7 +37,7 @@ class Photos extends Yag_Db_Table
     public $attachment = array(
 		'column'        => 'image', 
 		'store_path'    => PUBLIC_PATH,
-		'store_target'  => ':model/:year/:month/:day/:id',
+		'store_target'  => ':model/:year/:month/:day',
         'manipulator' => 'ImageTransform',
 		'styles' => array(
 			'square' => array( 
