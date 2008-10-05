@@ -32,17 +32,17 @@ Zend_Loader::registerAutoload();
  */
 define('PUBLIC_PATH', dirname(__FILE__) . '/../public');
 define('APPLICATION_PATH', dirname(__FILE__));
+defined('ENVIRONMENT')
+    or define('ENVIRONMENT', 'production');
 
 /*
  * Load configs
  */
-$environment = defined('ENVIRONMENT') ? ENVIRONMENT : 'development';
-
-$atomConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/atom.ini', $environment);
-$authConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth.ini', $environment);
+$atomConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/atom.ini', ENVIRONMENT);
+$authConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth.ini', ENVIRONMENT);
 $authIdentitiesConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth-identities.ini', $environment);
-$routeConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/routes.ini', $environment);
-$dsConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/db.ini', $environment);
+$routeConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/routes.ini', ENVIRONMENT);
+$dsConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/db.ini', ENVIRONMENT);
 
 Zend_Registry::set('atom-config', $atomConfig);
 Zend_Registry::set('auth-config', $authConfig);
@@ -76,6 +76,9 @@ $layout = Zend_Layout::startMvc(array(
     'layout'     => 'standard',
     'layoutPath' => APPLICATION_PATH . '/views/layouts',
 ));
+
+$view = $layout->getView();
+$view->addHelperPath('Yag/View/Helper/', 'Yag_View_Helper');
 
 /*
  * Set up the front controller 
