@@ -25,7 +25,7 @@ class Yag_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
     /**
      * Constructor
      *
-     * @param array $securedAreas
+     * @param array $config
      */
     public function __construct(Zend_Config $config)
     {
@@ -40,7 +40,8 @@ class Yag_Controller_Plugin_Auth extends Zend_Controller_Plugin_Abstract
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        if (false === Zend_Auth::getInstance()->hasIdentity()) {
+        if (true == $this->config->auth->enabled
+            && false === Zend_Auth::getInstance()->hasIdentity()) {
 	        foreach ($this->config->auth->securedAreas->toArray() as $controller => $actions) {
 	            if ($controller == $this->_request->getControllerName() && 
 	                in_array($this->_request->getActionName(), $actions)

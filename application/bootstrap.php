@@ -25,39 +25,52 @@ $includePath = array(
 );
 set_include_path(implode(PATH_SEPARATOR, $includePath));
 
-define('PUBLIC_PATH', dirname(__FILE__) . '/../public');
-
 require_once 'Zend/Loader.php';
 Zend_Loader::registerAutoload();
 
 /*
- * Load configs
+ * Set up defines
  */
-$environment = ($_SERVER['SERVER_NAME'] == '192.168.1.114') ? 'development' : 'production';
- 
-$config = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/atom.ini', $environment);
-Zend_Registry::set('atom-config', $config);
-$authConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth.ini', $environment);
-Zend_Registry::set('auth-config', $authConfig);
-$authIdentitiesConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth-identities.ini', $environment);
-Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
+define('PUBLIC_PATH', dirname(__FILE__) . '/../public');
+define('APPLICATION_PATH', dirname(__FILE__));
+
 /*
  * Date settings
  */
 date_default_timezone_set('UTC');
 
-$partial = '_search_pagination_control.phtml';
-Zend_View_Helper_PaginationControl::setDefaultViewPartial($partial);
-Zend_Paginator::setDefaultScrollingStyle('Sliding');
+/*
+ * Load configs
+ */
+$environment = defined('ENVIRONMENT') ? ENVIRONMENT : 'development';
 
-//$routeConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/routes.ini', 'production');
-//$yagConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/yag.ini', 'production');
-$dsConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/db.ini', $environment);
+$atomConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/atom.ini', $environment);
+$authConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth.ini', $environment);
+$authIdentitiesConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth-identities.ini', $environment);
+$routeConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/routes.ini', $environment);
+$dsConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/db.ini', $environment);
+
+Zend_Registry::set('atom-config', $atomConfig);
+Zend_Registry::set('auth-config', $authConfig);
+Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
 
 $db = Zend_Db::factory($dsConfig->db);
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
 
+/*
+ * Error handling
+ */
+error_reporting(E_ALL);
+ini_set('display_errors', ENVIRONMENT == 'development');
+ini_set('error_log', dirname(__FILE__) . '../logs/php_error_log');
+
+/*
+ * View settings
+ */
+
+Zend_View_Helper_PaginationControl::setDefaultViewPartial('_search_pagination_control.phtml');
+Zend_Paginator::setDefaultScrollingStyle('Sliding');
 
 $layoutOptions = array(
     'layout'     => 'standard',
@@ -65,56 +78,17 @@ $layoutOptions = array(
 );
 $layout = Zend_Layout::startMvc($layoutOptions);
 
+/*
+ * Set up the fron controller 
+ */
 $front = Zend_Controller_Front::getInstance();
 
-$router = $front->getRouter();
+$front->setParam('noErrorHandler', ENVIRONMENT == 'development');
+$front->throwExceptions(ENVIRONMENT == 'development');
 
-$route = new Zend_Controller_Router_Route(
-    'photo/',
-    array(
-        'controller' => 'photo',
-        'action'     => 'index'
-    )
-);
-$router->addRoute('photos', $route);
+$front->getRouter()->addConfig($routeConfig, 'routes');
 
-$route = new Zend_Controller_Router_Route(
-    'photo/:id/',
-    array(
-        'controller' => 'photo',
-        'action'     => 'show'
-    ),
-    array('id' => '\d+')
-);
-$router->addRoute('photo', $route);
-
-$route = new Zend_Controller_Router_Route(
-    'tags/show/:name/',
-    array(
-        'controller' => 'tags',
-        'action'     => 'show'
-    )
-);
-$router->addRoute('tags-name', $route);
-
-//$router->addConfig($routeConfig, 'routes');
-
-/*
- * Error handling
- */
-$front->setParam('noErrorHandler', true);
-$front->throwExceptions(true);
-error_reporting(E_ALL);
-ini_set('display_errors', true);
-ini_set('error_log', dirname(__FILE__) . '../logs/php_error_log');
-
-/*
- * Controller plugins
- */
 $front->registerPlugin(new Yag_Controller_Plugin_Auth($authConfig));
 
-/*
- * And run
- */
 $front->run(dirname(__FILE__) . '/controllers');
 
