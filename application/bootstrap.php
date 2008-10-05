@@ -17,11 +17,11 @@
  * Set include path
  */
 $includePath = array(
+	get_include_path(),
 	dirname(__FILE__) . '/library',
 	dirname(__FILE__) . '/models', 
 	dirname(__FILE__) . '/forms',
 	dirname(__FILE__) . '/views/helpers',
-	get_include_path(),
 );
 set_include_path(implode(PATH_SEPARATOR, $includePath));
 
