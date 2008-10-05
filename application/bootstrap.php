@@ -40,7 +40,7 @@ defined('ENVIRONMENT')
  */
 $atomConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/atom.ini', ENVIRONMENT);
 $authConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth.ini', ENVIRONMENT);
-$authIdentitiesConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth-identities.ini', $environment);
+$authIdentitiesConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/auth-identities.ini', ENVIRONMENT);
 $routeConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/routes.ini', ENVIRONMENT);
 $dsConfig = new Zend_Config_Ini(APPLICATION_PATH . '/configuration/db.ini', ENVIRONMENT);
 
