@@ -33,11 +33,13 @@ Zend_Loader::registerAutoload();
 /*
  * Load configs
  */
-$config = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/atom.ini', 'production');
+$environment = ($_SERVER['SERVER_NAME'] == '192.168.1.114') ? 'development' : 'production';
+ 
+$config = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/atom.ini', $environment);
 Zend_Registry::set('atom-config', $config);
-$authConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth.ini', 'production');
+$authConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth.ini', $environment);
 Zend_Registry::set('auth-config', $authConfig);
-$authIdentitiesConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth-identities.ini', 'production');
+$authIdentitiesConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/auth-identities.ini', $environment);
 Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
 /*
  * Date settings
@@ -50,7 +52,7 @@ Zend_Paginator::setDefaultScrollingStyle('Sliding');
 
 //$routeConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/routes.ini', 'production');
 //$yagConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/yag.ini', 'production');
-$dsConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/db.ini', 'production');
+$dsConfig = new Zend_Config_Ini(dirname(__FILE__) . '/configuration/db.ini', $environment);
 
 $db = Zend_Db::factory($dsConfig->db);
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
