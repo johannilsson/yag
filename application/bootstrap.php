@@ -8,7 +8,6 @@
  * with this package in the file LICENSE.
  *
  * @category   Yag
- * @package    Controllers
  * @copyright  Copyright (c) 2008 Johan Nilsson. (http://www.markupartist.com)
  * @license    New BSD License
  */
@@ -35,11 +34,6 @@ define('PUBLIC_PATH', dirname(__FILE__) . '/../public');
 define('APPLICATION_PATH', dirname(__FILE__));
 
 /*
- * Date settings
- */
-date_default_timezone_set('UTC');
-
-/*
  * Load configs
  */
 $environment = defined('ENVIRONMENT') ? ENVIRONMENT : 'development';
@@ -55,31 +49,36 @@ Zend_Registry::set('auth-config', $authConfig);
 Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
 
 $db = Zend_Db::factory($dsConfig->db);
+// Force the character set to UTF-8.
+//$db->query('SET NAMES UTF8');
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
+
+/*
+ * Date settings
+ */
+date_default_timezone_set('UTC');
 
 /*
  * Error handling
  */
 error_reporting(E_ALL);
 ini_set('display_errors', ENVIRONMENT == 'development');
-ini_set('error_log', dirname(__FILE__) . '../logs/php_error_log');
+ini_set('error_log', APPLICATION_PATH . '../logs/php_error_log');
 
 /*
  * View settings
  */
-
 Zend_View_Helper_PaginationControl::setDefaultViewPartial('_search_pagination_control.phtml');
 Zend_Paginator::setDefaultScrollingStyle('Sliding');
 
-$layoutOptions = array(
+$layout = Zend_Layout::startMvc(array(
     'layout'     => 'standard',
-    'layoutPath' => dirname(__FILE__) . '/views/layouts',
-);
-$layout = Zend_Layout::startMvc($layoutOptions);
+    'layoutPath' => APPLICATION_PATH . '/views/layouts',
+));
 
 /*
- * Set up the fron controller 
+ * Set up the front controller 
  */
 $front = Zend_Controller_Front::getInstance();
 
@@ -90,5 +89,5 @@ $front->getRouter()->addConfig($routeConfig, 'routes');
 
 $front->registerPlugin(new Yag_Controller_Plugin_Auth($authConfig));
 
-$front->run(dirname(__FILE__) . '/controllers');
+$front->run(APPLICATION_PATH . '/controllers');
 
