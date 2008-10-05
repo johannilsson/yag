@@ -18,5 +18,6 @@
     </ul>
     <?php endif;?>
 
-    <?php echo $this->partial('_map.phtml', array('photo' => $this->photo));?>
+    <?php //echo $this->partial('_map.phtml', array('photo' => $this->photo));?>
+    <?php echo $this->map($this->photo) ?>
 </div>

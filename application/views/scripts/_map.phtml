@@ -1,13 +1,11 @@
-<?php if ($this->photo->latitude && $this->photo->longitude) : ?>
-
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAA4GEY9Ockakr8adhjHbZESBS-E7vKUp85R137eYcPd0BB_ZnybhSwYt-QJpTIktJS0-SD9jl5PY-x_w" type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?= $this->apiKey ?>" type="text/javascript"></script>
 
 <script type="text/javascript">
 //<![CDATA[
 function load() {
     if (GBrowserIsCompatible()) {
         var map = new GMap2(document.getElementById("map"));
-        var point = new GLatLng(<?php echo $this->photo->latitude ?>, <?php echo $this->photo->longitude?>);
+        var point = new GLatLng(<?= $this->latitude ?>, <?= $this->longitude?>);
         map.setCenter(point, 15);
         var marker = new GMarker(point);
         map.addOverlay(marker);
@@ -22,4 +20,3 @@ window.onunload=function() {
 //]]>
 </script>
     <div id="map" style="width: 250px; height: 200px"></div>
-<?php endif;?>
