@@ -38,7 +38,7 @@ class Photos extends Yag_Db_Table
 		'column'        => 'image', 
 		'store_path'    => PUBLIC_PATH,
 		'store_target'  => ':model/:year/:month/:day/:id',
-        'manipulator' => 'Thumbnail',
+        'manipulator' => 'ImageTransform',
 		'styles' => array(
 			'square' => array( 
 			     'geometry' => 'c75x75'),
