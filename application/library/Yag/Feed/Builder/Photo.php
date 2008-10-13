@@ -81,7 +81,7 @@ class Yag_Feed_Builder_Photo implements Zend_Feed_Builder_Interface
         $entry = new Zend_Feed_Builder_Entry($photo->title, $this->_link . $link, $photo->description);
         $entry->setId($photo->id);
         $entry->setContent($content);
-        $entry->addEnclosure($this->_link . $photo->image->url(), 'image/jpeg'); // TODO: Fix types
+        $entry->addEnclosure($this->_link . $link, 'image/jpeg'); // TODO: Fix types
 
         $this->_entries[] = $entry;
         return $this;

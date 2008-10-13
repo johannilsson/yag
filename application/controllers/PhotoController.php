@@ -37,7 +37,7 @@ class PhotoController extends AbstractController
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         if (false === $contextSwitch->hasContext('atom')) {
             $contextSwitch->addContext('atom', $context)
-                          ->addActionContext('list', 'atom')
+                          ->addActionContext('index', 'atom')
                           ->initContext();
         }
     }
