@@ -56,6 +56,10 @@ td, th {
     background-color: #FFC1C1;
 }
 
+.tags ul {
+    padding: 0.5em 1.5em; 
+}
+
 .photo h2 {
     margin: 0 1em 1em 0;
 }

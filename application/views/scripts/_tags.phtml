@@ -1,0 +1,8 @@
+<div class="tags">
+    <h4>Tags</h4>
+    <ul>
+    <?php foreach ($this->tags as $tag) :?>
+        <li><a href="<?php echo $this->url(array('name' => $tag->name), 'tags-name'); ?>"><?php echo $tag->name ?></a></li>
+    <?php endforeach;?>
+    </ul>
+</div>
