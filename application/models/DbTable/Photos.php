@@ -33,27 +33,6 @@ class Photos extends Yag_Db_Table
     }
 
     /**
-     * Creates a new photo
-     *
-     * @param array $params
-     * @return Zend_Db_Table_Row_Abstract
-     */
-    public function createPhoto(array $params)
-    {
-        $params = new ArrayObject($params);
-
-		$photo = $this->createRow();
-
-		$photo->image       = $params->offsetGet('image');
-		$photo->created_on  = $params->offsetExists('created_on') ? $params->offsetGet('created_on') : date('Y-m-d H:i:s', time());
-		$photo->title       = $params->offsetGet('title');
-		$photo->description = $params->offsetGet('description');
-		$photo->save();
-
-		return $photo;
-    }
-
-    /**
      * Creates a temporary file.
      *
      * @param mixed $data
