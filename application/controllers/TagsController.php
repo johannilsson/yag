@@ -39,11 +39,13 @@ class TagsController extends AbstractController
 
     public function showAction()
     {
-        $tagModel = new Tags();
-        $tag = $tagModel->findByName(urldecode($this->getRequest()->getParam('name')));
+        $model = $this->_getTagModel();
+        $tag = $model->fetchEntryByName(
+            urldecode($this->getRequest()->getParam('name')));
 
         $photos = array();
         if (null !== $tag) {
+            // TODO: Add to model and add paging when we grow...
             $photos = $tag->findPhotosViaTaggedPhotosByTag();
         }
         $this->view->photos = $photos;
