@@ -7,7 +7,7 @@
 </div>
 
 <div id="sidebar">
-    <?php echo $this->action('stream', 'photo', null, array('id' => $this->photo->id)); ?> 
+    <?php echo $this->photoStream($this->photo) ?> 
 
     <?php if (count($this->tags) > 0) :?>
     <h4>Tags</h4>

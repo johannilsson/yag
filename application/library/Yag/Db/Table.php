@@ -18,35 +18,12 @@ require_once 'Zend/Filter/Input.php';
 
 class Yag_Db_Table extends Zend_Db_Table_Abstract
 {
-    protected $_filters = array();
-    protected $_validators = array();
     protected $_rowClass = 'Yag_Db_Table_Row';
     protected $_rowsetClass = 'Yag_Db_Table_Rowset';
 
-    public function findOne()
+    public function getCols()
     {
-        $set = parent::find(func_get_args());
-
-        if (count($set) == 0) {
-            throw new Zend_Db_Table_Exception('Does not exist');
-        }
-
-        return $set->current();
-    }
-
-    public function getFilters()
-    {
-        return $this->_filters;
-    }
-
-    public function getValidators()
-    {
-        return $this->_validators;
-    }
-
-    public function filterData(array $data)
-    {
-        return new Zend_Filter_Input($this->getFilters(), $this->getValidators(), $data);
+        return $this->_cols;
     }
 
 }

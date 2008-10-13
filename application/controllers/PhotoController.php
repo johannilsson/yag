@@ -19,7 +19,7 @@ require_once 'Zend/Controller/Action.php';
  * Controller for displaying and editing a photo.
  *
  */
-class PhotoController extends Zend_Controller_Action
+class PhotoController extends AbstractController
 {
     /**
      * Init
@@ -49,197 +49,151 @@ class PhotoController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-        $this->_redirect($this->_helper->url->simple('list'));
+        $model   = $this->_getPhotoModel();
+        $entries = $model->fetchEntries($this->_getParam('page', 1));
+
+        $this->view->url       = 'http://' . $this->_request->getHttpHost() . $this->_request->getBaseUrl(); 
+        $this->view->paginator = $entries;
     }
 
     /**
-     * Create new photo form 
+     * Create new photo
      *
      */
     public function newAction()
     {
+        require_once APPLICATION_PATH . '/forms/NewPhotoForm.php';
         $form = new NewPhotoForm();
-        $form->setAction($this->_helper->url->simple('new'));
+        $form->setAction($this->_helper->url->simple('create'));
+        $this->view->form = $form;
+    }
+
+    /**
+     * Create
+     *
+     * POST
+     */
+    public function createAction()
+    {
+        if (!$this->_request->isPost()) {
+            $this->_redirect($this->_helper->url('new'));
+        }
+
+        require_once APPLICATION_PATH . '/forms/NewPhotoForm.php';
+        $form = new NewPhotoForm();
+        $form->setAction($this->_helper->url->simple('create'));
         $this->view->form = $form;
 
-        $formData = array();
+        if (!$form->isValid($this->_request->getPost())) {
+            $this->view->messages = $form->getMessages();
 
-        if ($this->_request->isPost()) {
-            $formData = array(
-                'file'        => $form->getValue('file'),
-                'title'       => $this->_request->getParam('title'),
-                'description' => $this->_request->getParam('description'),
-            );
-
-            if ($form->isValid($formData)) {
-                $photos = new Photos();
-
-                $photo = $photos->createRow();
-                $photo->image       = new ArrayObject($_FILES['file1']); // TODO: the file transfer is a bit buggy to stick with this for now
-                $photo->created_on  = date('Y-m-d H:i:s', time());
-                $photo->title       = $form->getValue('title');
-                $photo->description = $form->getValue('description');
-                $photo->save();
-            }
+            return $this->render('new');
         }
-        $form->populate($formData);
+
+        if (!$form->file->receive()) {
+            $this->view->messages = array(array('failed' => 'Failed to upload the image'));
+        }
+
+        $adapter = $form->file->getTransferAdapter();
+        $file = $adapter->getFileName('file');
+
+        $model = $this->_getPhotoModel();
+        $id = $model->add($form->getValues(), $file);
+
+        // Should probably not be here, but it works for now...
+        unlink($file);
+
+        $this->_redirect($this->_helper->url('edit', null, null, array('id' => $id)));        
     }
 
     /**
      * Output form for editing
      *
+     * GET
      */
     public function editAction()
     {
-        $photos = new Photos();
-        $photo = $photos->findOne($this->getRequest()->getParam('id'));
+        $model = $this->_getPhotoModel();
+        $photo = $model->fetchEntry($this->getRequest()->getParam('id'));
 
-        $tagSet = $photo->findTagsViaTaggedPhotosByPhoto();
-        $tagNames = array();
-        foreach ($tagSet as $tag)
-        {
-           $tagNames[] = $tag->name; 
+        if (null === $photo) {
+            return $this->_forward('notfound', 'error');
         }
 
-        $photoForm = new PhotoForm();
-        $photoForm->setDefault('tags', implode(',', $tagNames));
-        $photoForm->populate($photo->toArray());
-        $photoForm->setAction($this->_helper->url->simple('update'));
+        $tagNames = array();
+        foreach ($model->fetchTags($photo) as $tag) {
+            $tagNames[] = $tag->name;
+        }
+
+        $form  = $model->getForm();
+        $form->setAction($this->_helper->url('update', null, null, array('id' => $photo->id)));
+        $form->setDefault('tags', implode(',', $tagNames));
+        $form->populate($photo->toArray());
 
         $this->view->photo       = $photo;
-        $this->view->photoForm   = $photoForm;
+        $this->view->photoForm   = $form;
     }
 
     /**
      * Updates one photo
      *
+     * PUT
      */
     public function updateAction()
     {
-        $photos = new Photos();
-        $photo = $photos->findOne($this->getRequest()->getParam('id'));
-
-        $photoForm = new PhotoForm();
-        $photoForm->setAction($this->_helper->url->simple('update'));
-
-        if ($this->_request->isPost()) {
-            $formData = $this->_request->getPost();
-
-            if ($photoForm->isValid($formData)) {
-                $photo->taken_on    = $photoForm->getValue('taken_on');
-                $photo->title       = $photoForm->getValue('title');
-                $photo->description = $photoForm->getValue('description');
-
-                $photo->save();
-
-                // Has tags?
-                if ('' != ($tags = $photoForm->getValue('tags'))) {
-                    $taggedPhotos = new TaggedPhotos();
-                    $taggedPhotos->assocciatePhotoWith($photo, explode(',', $tags));
-                }
-            }
+        if (!$this->_request->isPost()) {
+            $this->_redirect($this->_helper->url('index'));
         }
 
-        $this->_redirect($this->_helper->url('edit', null, null, array('id' => $this->getRequest()->getParam('id'))));
-    }
+        $id = $this->getRequest()->getParam('id');
 
-    /**
-     * Replace one photo with antother
-     */
-    public function replaceAction()
-    {
-        $photos = new Photos();
-        $photo = $photos->findOne($this->getRequest()->getParam('id'));
+        $model   = $this->_getPhotoModel();
+        $photo   = $model->fetchEntry($id);
 
-        $uploadForm = new UploadPhotoForm();
-        $uploadForm->setDefault('id', $photo->id);
-        $uploadForm->setAction($this->_helper->url->simple('replace'));
-        $this->view->form = $uploadForm;
+        if (!$model->update($this->_request->getPost(), $id)) {
+            $form  = $model->getForm();
+            $form->setAction($this->_helper->url('update', null, null, array('id' => $id)));
 
-        if ($this->_request->isPost()) {
-            $formData = array(
-                'id'    => $this->_request->getParam('id'),
-                'file'  => $uploadForm->getValue('file'),
-            );
-
-            if ($uploadForm->isValid($formData)) {
-                $photo->image = new ArrayObject($_FILES['file']); // TODO: the file transfer is a bit buggy to stick with this for now
-                $photo->save();
-            }
+            $this->view->photo       = $photo;
+            $this->view->photoForm   = $form;
+            return $this->render('edit');
         }
-        $this->view->photo = $photo;
-    }
-
-    /**
-     * Lists all photos
-     *
-     */
-    public function listAction()
-    {
-        $photos = new Photos();
-
-        $photoSet = $photos->fetchAll($photos->select()->order('created_on desc'));
-
-        $paginator  = Zend_Paginator::factory($photoSet);
-        $paginator->setItemCountPerPage(6)
-            ->setPageRange(8)
-            ->setCurrentPageNumber($this->_getParam('page'));
-
-        $this->view->url       = 'http://' . $this->_request->getHttpHost() . $this->_request->getBaseUrl(); 
-        $this->view->paginator = $paginator;
+        $this->_redirect($this->_helper->url('edit', null, null, array('id' => $id)));
     }
 
     /**
      * Shows one photo
      *
+     * GET
      */
     public function showAction()
     {
-        $photos = new Photos();
+        $model   = $this->_getPhotoModel();
+        $photo   = $model->fetchEntry($this->getRequest()->getParam('id'));
 
-        $photo   = $photos->fetchRow($photos->select()->where('id = ?', $this->getRequest()->getParam('id')));
         if (null === $photo) {
-            throw new RuntimeException('Photo does not exists');
+            return $this->_forward('notfound', 'error');
         }
 
-        $tags = $photo->findTagsViaTaggedPhotosByPhoto();
+        //$tags = $photo->findTagsViaTaggedPhotosByPhoto();
         $this->view->photo  = $photo;
-        $this->view->tags   = $tags;
+        $this->view->tags   = array();//$tags;
     }
 
     /**
-     * Shows previous and next photos. 
-     *
+     * 
+     * DELETE
      */
-    public function streamAction()
-    {
-        $id     = (int) $this->getRequest()->getParam('id');
-        $album  = (string) $this->getRequest()->getParam('album', '');
-
-        $photos = new Photos();
-
-        $current = $photos->fetchRow($photos->select()->where('id = ?', $id));
-
-        $this->view->previous = $photos->getNeighbour($current, 'previous');
-        $this->view->next     = $photos->getNeighbour($current, 'next');
-    }
-
     public function deleteAction()
     {
-        $id = (int) $this->getRequest()->getParam('id');
+        $model = $this->_getPhotoModel();
 
-        $photoModel = new Photos();
-        $photo = $photoModel->fetchRow($photoModel->select()->where('id = ?', $id));
-        if (null === $photo) {
-            $this->view->message = 'Photo does not exists';
-            return;
-        }
-        try {
-            $photo->delete();
+        try
+        {
+            $model->delete($this->getRequest()->getParam('id'));
             $this->view->message = 'Photo deleted';
         } catch (Exception $e) {
             $this->view->message = 'Could not delete ' . $e->getMessage();
         }
     }
-
 }

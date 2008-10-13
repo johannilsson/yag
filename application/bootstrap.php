@@ -18,9 +18,6 @@
 $includePath = array(
 	get_include_path(),
 	dirname(__FILE__) . '/library',
-	dirname(__FILE__) . '/models', 
-	dirname(__FILE__) . '/forms',
-	dirname(__FILE__) . '/views/helpers',
 );
 set_include_path(implode(PATH_SEPARATOR, $includePath));
 
@@ -50,7 +47,7 @@ Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
 
 $db = Zend_Db::factory($dsConfig->db);
 // Force the character set to UTF-8.
-//$db->query('SET NAMES UTF8');
+$db->query('SET NAMES UTF8');
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
 

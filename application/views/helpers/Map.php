@@ -1,6 +1,6 @@
 <?php
 
-class Yag_View_Helper_Map
+class Zend_View_Helper_Map
 {
     /**
      * Sets the view instance.

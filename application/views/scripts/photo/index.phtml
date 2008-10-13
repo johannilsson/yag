@@ -1,2 +1,3 @@
-  <h1>YAG</h1> 
-  <p>Welcome</p>
+<?php echo $this->partial('_album.phtml', array('photos' => $this->paginator)) ?>
+
+<?php echo $this->paginationControl($this->paginator)?>

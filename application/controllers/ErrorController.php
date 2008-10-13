@@ -33,6 +33,7 @@ class ErrorController extends Zend_Controller_Action
                 $this->getResponse()
                      ->setRawHeader('HTTP/1.1 404 Not Found');
                 $message = "404 Not Found";
+                //return $this->_render('notfound');
                 break;
             default:
                 // application error; display error page, but don't change
@@ -48,9 +49,16 @@ class ErrorController extends Zend_Controller_Action
                 $log->debug($exception->getMessage() . "\n" . 
                             $exception->getTraceAsString());
                 */
-                $message = $exception->getMEssage();
+                $message = $exception->getMessage();
                 break;
         }
         $this->view->message = $message;
+    }
+
+    public function notfoundAction()
+    {
+        $this->getResponse()
+             ->setRawHeader('HTTP/1.1 404 Not Found');
+        $this->view->message = "404 Not Found";
     }
 }

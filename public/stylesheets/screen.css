@@ -49,6 +49,13 @@ td, th {
     /*background-color: #ff2;*/
 }
 
+.errors {
+    margin: .5em;
+    padding: 1.5em;
+    border: 1px solid red;
+    background-color: #FFC1C1;
+}
+
 .photo h2 {
     margin: 0 1em 1em 0;
 }

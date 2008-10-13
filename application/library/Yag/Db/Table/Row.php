@@ -18,25 +18,6 @@ require_once 'Zend/Db/Table/Row.php';
 
 class Yag_Db_Table_Row extends Zend_Db_Table_Row
 {
-    protected $_filterInput = null;
-
-    public function getErrorMessages()
-    {
-        return $this->_filterInput->getMessages();
-    }
-
-    public function save()
-    {
-    /*
-        $this->_filterInput = $this->_getTable()->filterData($this->_data);
-
-        if (false === $this->_filterInput->isValid()) {
-            throw new RuntimeException('invalid data ');
-        }
-    */
-        parent::save();
-    }
-
     public function isModified($field)
     {
         if (isset($this->_modifiedFields[$field])) {

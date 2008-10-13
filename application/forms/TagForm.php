@@ -18,38 +18,20 @@
  * Photo form
  *
  */
-class PhotoForm extends Zend_Form
+class TagForm extends Zend_Form
 {
 	public function init()
 	{
 		$this->addElementPrefixPath('Yag', 'Yag/');
 
-        $this->setName('photoform')
-             ->setElementsBelongTo('photoform');
+        $this->setName('tagform')
+             ->setElementsBelongTo('tagform');
 
-        $this->addElement('text', 'title', array(
+        $this->addElement('text', 'name', array(
             'label' => 'Title:', 
             'required' => true, 
             'filters' => array('StringTrim'), 
-            )); 
-
-        $this->addElement('text', 'description', array(
-            'label' => 'Description:', 
-            'required' => false, 
-            'filters' => array('StringTrim'), 
             ));
- 
-        $this->addElement('text', 'taken_on', array(
-            'label' => 'Taken on:', 
-            'required' => false, 
-            'filters' => array('StringTrim'), 
-            )); 
-
-        $this->addElement('text', 'tags', array(
-            'label' => 'Tags:', 
-            'required' => false, 
-            'filters' => array('StringTrim'), 
-            )); 
 
         $this->addElement('submit', 'submit', array(
             'label' => 'Save',

@@ -13,6 +13,9 @@
  * @license    New BSD License
  */
 
+require_once APPLICATION_PATH . '/models/DbTable/Photos.php';
+require_once APPLICATION_PATH . '/models/DbTable/Tags.php';
+
 /**
  * Tagged Photos
  *
@@ -68,8 +71,13 @@ class TaggedPhotos extends Yag_Db_Table
      */
     public function assocciatePhotoWith($photo, array $tagNames)
     {
-        // Remove all references
-        $this->deleteByPhotoId($photo->id);
+        if ($photo instanceof Yag_Db_Table_Row) {
+            $photoId = $photo->id;
+        }
+        $photoId = $photo;
+
+        // Remove all references        
+        $this->deleteByPhotoId($photoId);
 
         $tags = new Tags();
 
@@ -90,8 +98,8 @@ class TaggedPhotos extends Yag_Db_Table
 
             $taggedPhotos = $this->createRow(array(
                 'tag_id'   => $tag->id, 
-                'photo_id' => $photo->id)
-            );
+                'photo_id' => $photoId));
+
             $taggedPhotos->save();
             
             $assoccTags[] = $tag;

@@ -13,6 +13,8 @@
  * @license    New BSD License
  */
 
+require_once APPLICATION_PATH . '/models/DbTable/TaggedPhotos.php';
+
 /**
  * Tag Model
  *
@@ -39,24 +41,6 @@ class Tags extends Yag_Db_Table
      * @var unknown_type
      */
     protected $_dependentTables = array('TaggedPhotos');
-
-    /**
-     * Filters
-     *
-     * @var array
-     */
-    protected $_filters = array(
-        '*' => 'StringTrim',
-    );
-
-    /**
-     * Validators
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'name' => array('Alnum', 'allowEmpty' => false, array('StringLength', 1, 50)),
-    );
 
     /**
      * Find by name

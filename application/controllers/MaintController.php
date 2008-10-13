@@ -19,18 +19,18 @@ require_once 'Zend/Controller/Action.php';
  * Controller for importing photos
  *
  */
-class MaintController extends Zend_Controller_Action
+class MaintController extends AbstractController
 {
     public function missingimageAction()
     {
-        $photoModel = new Photos();
-        $photos = $photoModel->fetchAll();
+        $model   = $this->_getPhotoModel();
+        $entries = $model->fetchEntries();
 
         $missingPhotos = array();
 
-        foreach ($photos as $photo) {
-            foreach ($photoModel->attachment['styles'] as $styleName => $options) {
-                if (false === $photo->image->__get($styleName)->exists()) {
+        foreach ($entries as $photo) {
+            foreach ($model->getImageVariants() as $styleName => $options) {
+                if (false == file_exists($model->getImageFileName($photo, $styleName))) {
                     $missingPhotos[] = $photo;
                     break;
                 }
@@ -42,17 +42,18 @@ class MaintController extends Zend_Controller_Action
 
     public function manipulateAction()
     {
-        $photoModel = new Photos();
-        $photo = $photoModel->findOne($this->getRequest()->getParam('id'));
-        if (true === $photo->image->exists()) {
+        $model   = $this->_getPhotoModel();
+        $photo   = $model->fetchEntry($this->getRequest()->getParam('id'));
+
+        if (file_exists($model->getImageFileName($photo))) {
             try {
-                $photo->image->applyManipulations();
+                $model->applyManipulations($model->getImageFileName($photo));
                 $this->view->message = 'Applied manipulations';
             } catch (Gem_Manipulate_Exception $e) {
                 $this->view->message = 'Failed to manipulate: ' . $e->getMessage();
             }
         } else {
-            $this->view->message = 'Original image does not exists';
+            $this->view->message = 'Original image does not exists: ' . $model->getImageFileName($photo);
         }
     }
 }

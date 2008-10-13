@@ -13,14 +13,30 @@
  * @license    New BSD License
  */
 
-require_once 'Zend/Controller/Action.php';
+require_once 'AbstractController.php';
 
 /**
  * Controller for displaying and editing a photo.
  *
  */
-class TagsController extends Zend_Controller_Action
+class TagsController extends AbstractController
 {
+    /*
+    public function newAction()
+    {
+        $form = $this->_getTagModel()->getForm();
+        $form->setAction($this->_helper->url->simple('create'));
+        $this->view->form = $form;    
+    }
+
+    public function createAction()
+    {
+        if (!$this->_request->isPost()) {
+            $this->_redirect($this->_helper->url('new'));
+        }
+    }
+    */
+
     public function showAction()
     {
         $tagModel = new Tags();
