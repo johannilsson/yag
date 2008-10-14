@@ -37,7 +37,7 @@ class PhotoController extends AbstractController
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         if (false === $contextSwitch->hasContext('atom')) {
             $contextSwitch->addContext('atom', $context)
-                          ->addActionContext('index', 'atom')
+                          ->addActionContext('list', 'atom')
                           ->initContext();
         }
     }
@@ -48,6 +48,16 @@ class PhotoController extends AbstractController
      * Forwards to list.
      */
     public function indexAction()
+    {
+        $this->_redirect($this->_helper->url('list'));
+    }
+
+    /**
+     * List action
+     *
+     * Forwards to list.
+     */
+    public function listAction()
     {
         $model   = $this->_getPhotoModel();
         $entries = $model->fetchEntries($this->_getParam('page', 1));
