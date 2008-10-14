@@ -55,6 +55,12 @@ class PhotoModel extends AbstractModel
             $this->_getValues($data), 
             $this->getImageDetails($file));
 
+        // If created on is provided force it to be set.
+        // This alows for import scripts to have previous created dates set.
+        if (isset($data['created_on'])) {
+            $values['created_on'] = $data['created_on'];
+        }
+
         $id = $this->getTable()->insert(
             $this->_getTableValues($values));
 
@@ -175,6 +181,7 @@ class PhotoModel extends AbstractModel
             throw new Exception('File does not exists');
         }
 
+        // TODO: Verify that we are dealing with an exif friendly file...
         $exif = exif_read_data($file);
 
         // Add lon and lat data if available
