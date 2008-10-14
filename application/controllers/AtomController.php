@@ -20,7 +20,7 @@ require_once 'Zend/Controller/Action.php';
  * AtomController
  *
  */
-class AtomController extends Zend_Controller_Action 
+class AtomController extends AbstractController 
 {
     /**
      * Pre-dispatch routines
@@ -100,30 +100,33 @@ class AtomController extends Zend_Controller_Action
             return $this->_forward('error');
         }
 
-        $photos = new Photos();
+        $photoModel = $this->_getPhotoModel();
+        $entryData = array();
+        $id = null;
 
         foreach ($feed as $entry) {
-            if ('' != ($photoId = $entry->link('related'))) {
-                $photo = $photos->findOne($photoId);
+            //
+            // Entry is related to another entry
+            // 
+            if ('' != ($id = $entry->link('related'))) {
                 // Set description
                 if ('' != $entry->content() && $entry->content->offsetGet('mode') == 'xml') {
-                    $photo->description = $entry->content;
-                    $photo->save();
+                    $entryData['description'] = $entry->content;
                 }
                 // Set tags
                 if ('' != ($tags = $entry->{"dc:subject"})) {
-                    $taggedPhotos = new TaggedPhotos();
-                    $taggedPhotos->assocciatePhotoWith($photo, explode(' ', $tags));
+                    $entryData['tags'] = implode(',', explode(' ', $tags));
                 }
+                $photoModel->update($entryData, $id);
+            // 
+            // A new entry is uploaded
+            //
             } else if ('' != $entry->content()) {
-	            $file = $photos->createTmpFile(base64_decode($entry->content()));
-	            $params = array(
-	                'image'         => $file,
-	                'title'         => $entry->title,
-	                'created_on'    => $entry->issued,
-	                'description'   => '',
-	            );
-	            $photo = $photos->createPhoto($params);
+	            $file = $this->_createTmpFile(base64_decode($entry->content()));
+	            $entryData['title']       = $entry->title;
+	            $entryData['created_on']  = date('Y-m-d H:i:s', strtotime($entry->issued));
+
+	            $id = $photoModel->add($entryData, $file);
             } else {
                 continue; 
             }
@@ -132,10 +135,10 @@ class AtomController extends Zend_Controller_Action
 
             $this->_response->setHttpResponseCode(201);
             $this->_response->setHeader('Status', '201 Created');
-            $this->_response->setHeader('Location', $url . $this->_helper->url('view', 'photo', null, array('id' => $photo->id)));
+            $this->_response->setHeader('Location', $url . $this->_helper->url('view', 'photo', null, array('id' => $id)));
 
             $this->view->url   = $url;
-            $this->view->photo = $photo;
+            $this->view->photo = $photoModel->fetchEntry($id);
 
             $this->render('upload');
         }
@@ -149,5 +152,21 @@ class AtomController extends Zend_Controller_Action
     public function feedAction()
     {
         $this->_forward('list', 'photo', null, array('format' => 'atom'));
+    }
+
+    /**
+     * Creates a temporary file.
+     *
+     * @param mixed $data
+     * @return string
+     */
+    private function _createTmpFile($data)
+    {
+        //$size = getimagesize($data);
+        // TODO: Get correct extension
+        // TODO: fixed tmp path
+        $filename = APPLICATION_PATH . '/../upload/app-' . date('Ymhis', time()) . '.jpg';
+        file_put_contents($filename, $data);
+        return $filename;
     }
 }
