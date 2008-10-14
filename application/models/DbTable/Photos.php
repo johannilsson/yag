@@ -22,30 +22,22 @@ class Photos extends Yag_Db_Table
 {
     protected $_name = 'photos';
     protected $_primary = 'id';
-
     protected $_dependentTables = array('TaggedPhotos');
-
 
     public function insert(array $data)
     {
-        $data['created_on'] = date('Y-m-d H:i:s');
+        if (!isset($data['created_on'])) {
+            $data['created_on'] = date('Y-m-d H:i:s');
+        }
+        $data['updated_on'] = date('Y-m-d H:i:s');
+
         return parent::insert($data);
     }
 
-    /**
-     * Creates a temporary file.
-     *
-     * @param mixed $data
-     * @return string
-     */
-    public function createTmpFile($data)
+    public function update(array $data, $where)
     {
-        //$size = getimagesize($data);
-        // TODO: Get correct extension
-        // TODO: fixed tmp path
-        $filename = '/tmp/app-' . date('Ymhis', time()) . '.jpg';
-        file_put_contents($filename, $data);
-        return $filename;
+        $data['updated_on'] = date('Y-m-d H:i:s');
+        return parent::update($data, $where);
     }
 
     /**
