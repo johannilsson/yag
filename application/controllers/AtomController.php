@@ -109,14 +109,17 @@ class AtomController extends AbstractController
             // Entry is related to another entry
             // 
             if ('' != ($id = $entry->link('related'))) {
+                $photo = $photoModel->fetchEntry($id);
+                $entryData = $photo->toArray();
                 // Set description
                 if ('' != $entry->content() && $entry->content->offsetGet('mode') == 'xml') {
-                    $entryData['description'] = $entry->content;
+                    $entryData['description'] = (string) $entry->content;
                 }
                 // Set tags
                 if ('' != ($tags = $entry->{"dc:subject"})) {
                     $entryData['tags'] = implode(',', explode(' ', $tags));
                 }
+
                 $photoModel->update($entryData, $id);
             // 
             // A new entry is uploaded
