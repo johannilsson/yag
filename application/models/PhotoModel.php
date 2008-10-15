@@ -75,7 +75,8 @@ class PhotoModel extends AbstractModel
 
         $where = $this->getTable()->getAdapter()->quoteInto('id = ?', $id);
         $this->getTable()->update(
-            $this->_getTableValues($values), $where);
+            $this->_getTableValues($values),
+            $where);
 
         // csv list of tags
         if (isset($values['tags'])) {
@@ -106,27 +107,28 @@ class PhotoModel extends AbstractModel
 
     public function saveImage($photo, $file)
     {
+        if (!file_exists($file)) {
+            throw new InvalidArgumentException('Provided file does not exists');
+        }
+
         if (is_numeric($photo)) {
             $photo = $this->fetchEntry($photo);
         }
 
-        $file = new SplFileInfo($file);
-        $photo->image = $file->getFilename();
+        $photo->image = basename($file);
 
-        // Create destination directory if not exists
         $imageFileName = $this->getImageFileName($photo);
 
+        // Create destination directory if not exists
         // If passed file is the same we can skip this
-        // This could happen on a failed upload and the row is missing the image.
-        if ($file->getRealPath() != $imageFileName) {        
+        if ($file != $imageFileName) {
             $destination = dirname($imageFileName);
             if (false == is_dir($destination)) {
                 if (@mkdir($destination, 0755, true) == false) {
                     throw new Exception('Could not create: ' . $destination);
                 }
             }
-
-            copy($file->getRealPath(), $imageFileName);      
+            copy($file, $imageFileName);
         }
 
         $photo->save();
@@ -179,6 +181,10 @@ class PhotoModel extends AbstractModel
     {
         if (false == file_exists($file)) {
             throw new Exception('File does not exists');
+        }
+        $exifSupport = array(IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM);
+        if (!in_array(exif_imagetype($file), $exifSupport)) {
+            return;
         }
 
         // TODO: Verify that we are dealing with an exif friendly file...
