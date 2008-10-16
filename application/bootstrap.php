@@ -47,7 +47,7 @@ Zend_Registry::set('auth-identities-config', $authIdentitiesConfig);
 
 $db = Zend_Db::factory($dsConfig->db);
 // Force the character set to UTF-8.
-$db->query('SET NAMES UTF8');
+//$db->query('SET NAMES UTF8');
 Zend_Db_Table_Abstract::setDefaultAdapter($db);
 Zend_Registry::set('db', $db);
 
