@@ -50,6 +50,7 @@ class AuthController extends Zend_Controller_Action
             return $this->_forward('verify');
         }
 
+        require_once APPLICATION_PATH . '/forms/LoginOpenIdForm.php';
         $form = new LoginOpenIdForm();
         $form->setAction($this->_helper->url->simple('login'));
         $this->view->form = $form;
