@@ -1,11 +1,11 @@
 <ul class="stream">
     <?php if ($this->next instanceof Zend_Db_Table_Row_Abstract):?>
-    <li><a href="<?php echo $this->url(array('id' => $this->next->id)); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->next, 'style' => 'square')) ?></a></li>
+    <li><a href="<?= $this->photoLink($this->next) ?>"><?= $this->partial('_photo.phtml', array('photo' => $this->next, 'style' => 'square')) ?></a></li>
     <?php else:?>
     <li>You are at the latest photo</li>
     <?php endif; ?>
     <?php if ($this->previous instanceof Zend_Db_Table_Row_Abstract):?>
-    <li><a href="<?php echo $this->url(array('id' => $this->previous->id)); ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $this->previous, 'style' => 'square')) ?></a></li>
+    <li><a href="<?= $this->photoLink($this->previous) ?>"><?= $this->partial('_photo.phtml', array('photo' => $this->previous, 'style' => 'square')) ?></a></li>
     <?php else:?>
     <li>You found the <a href="http://shibumi.org/eoti.htm">end</a></li>
     <?php endif; ?>

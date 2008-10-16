@@ -22,7 +22,7 @@
         </copy>
         <copy todir="${dist.dir}/public">
             <fileset dir="public">
-                <exclude name="*photos/**"/>
+                <exclude name="*photo/**"/>
             </fileset>
         </copy>
 

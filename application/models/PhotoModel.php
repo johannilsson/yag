@@ -160,7 +160,7 @@ class PhotoModel extends AbstractModel
     {
         $path = array(
             PUBLIC_PATH, 
-            'photos', 
+            'photo', 
             date('Y', strtotime($photo->created_on)),
             date('m', strtotime($photo->created_on)),
             date('d', strtotime($photo->created_on)),
