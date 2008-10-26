@@ -108,16 +108,19 @@ class AtomController extends AbstractController
             // Entry is related to another entry
             // 
             if (isset($entry->link)) {
+                // Set description
+                if ('' != $entry->content() && $entry->content->offsetGet('mode') == 'xml') {
+                    $description = (string) $entry->content;
+                }
+                // Set tags
+                if ('' != ($tags = $entry->{"dc:subject"})) {
+                     $tags = implode(',', explode(' ', $tags));
+                }
+
                 foreach ($entry->link as $link) {
                     $entryData = array();
-                    // Set description
-                    if ('' != $entry->content() && $entry->content->offsetGet('mode') == 'xml') {
-                        $entryData['description'] = (string) $entry->content;
-                    }
-                    // Set tags
-                    if ('' != ($tags = $entry->{"dc:subject"})) {
-                        $entryData['tags'] = implode(',', explode(' ', $tags));
-                    }
+                    $entryData['description'] = $description;
+                    $entryData['tags'] = $tags;
 
                     $id = $link->getDom()->getAttribute('href');
                     try {
