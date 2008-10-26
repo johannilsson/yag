@@ -101,31 +101,40 @@ class AtomController extends AbstractController
         }
 
         $photoModel = $this->_getPhotoModel();
-        $entryData = array();
         $id = null;
 
         foreach ($feed as $entry) {
             //
             // Entry is related to another entry
             // 
-            if ('' != ($id = $entry->link('related'))) {
-                $photo = $photoModel->fetchEntry($id);
-                $entryData = $photo->toArray();
-                // Set description
-                if ('' != $entry->content() && $entry->content->offsetGet('mode') == 'xml') {
-                    $entryData['description'] = (string) $entry->content;
-                }
-                // Set tags
-                if ('' != ($tags = $entry->{"dc:subject"})) {
-                    $entryData['tags'] = implode(',', explode(' ', $tags));
-                }
+            if (isset($entry->link)) {
+                foreach ($entry->link as $link) {
+                    $entryData = array();
+                    // Set description
+                    if ('' != $entry->content() && $entry->content->offsetGet('mode') == 'xml') {
+                        $entryData['description'] = (string) $entry->content;
+                    }
+                    // Set tags
+                    if ('' != ($tags = $entry->{"dc:subject"})) {
+                        $entryData['tags'] = implode(',', explode(' ', $tags));
+                    }
 
-                $photoModel->update($entryData, $id);
+                    $id = $link->getDom()->getAttribute('href');
+                    try {
+                        $photo = $photoModel->fetchEntry($id);
+                        $entryData = $photo->toArray();
+
+                        $photoModel->update($entryData, $id);
+                    } catch (Exception $e) {
+                        ; // TODO: Log....
+                    }
+                }
             // 
             // A new entry is uploaded
             //
             } else if ('' != $entry->content()) {
 	            $file = $this->_createTmpFile(base64_decode($entry->content()));
+	            $entryData = array();
 	            $entryData['title']       = $entry->title;
 	            $entryData['created_on']  = date('Y-m-d H:i:s', strtotime($entry->issued));
 
