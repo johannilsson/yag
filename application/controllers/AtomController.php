@@ -117,19 +117,27 @@ class AtomController extends AbstractController
                      $tags = implode(',', explode(' ', $tags));
                 }
 
-                foreach ($entry->link as $link) {
-                    $entryData = array();
+                $entryData = array();
+
+                if (!is_array($entry->link)) {
+                    $id = $entry->link('related');
+                    $photo = $photoModel->fetchEntry($id);
+                    $entryData = $photo->toArray();
                     $entryData['description'] = $description;
                     $entryData['tags'] = $tags;
-
-                    $id = $link->getDom()->getAttribute('href');
-                    try {
-                        $photo = $photoModel->fetchEntry($id);
-                        $entryData = $photo->toArray();
-
-                        $photoModel->update($entryData, $id);
-                    } catch (Exception $e) {
-                        ; // TODO: Log....
+                    $photoModel->update($entryData, $id);
+                } else {
+                    foreach ($entry->link as $link) {
+                        $id = $link->getDom()->getAttribute('href');
+                        try {
+                            $photo = $photoModel->fetchEntry($id);
+                            $entryData = $photo->toArray();
+                            $entryData['description'] = $description;
+                            $entryData['tags'] = $tags;
+                            $photoModel->update($entryData, $id);
+                        } catch (Exception $e) {
+                            ; // TODO: Log....
+                        }
                     }
                 }
             // 
