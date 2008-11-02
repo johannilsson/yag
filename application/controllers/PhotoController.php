@@ -66,6 +66,39 @@ class PhotoController extends AbstractController
         $this->view->paginator = $entries;
     }
 
+    public function archiveAction()
+    {
+        $model = $this->_getPhotoModel();
+
+        $archive = array();
+        $prevYear = 0;
+        foreach ($model->fetchArchive() as $data) {
+            $split = split('-', $data['created_on']);
+            if ($split[0] != $prevYear) {
+                $months = array();
+            }
+            $months[$split[1]] = $data['count'];
+            $archive[$split[0]] = $months;
+            $prevYear = $split[0];
+        }
+
+        $this->view->archive = $archive;
+    }
+
+    public function bycreatedAction()
+    {
+        $date = array();
+        $date['year']  = $this->_getParam('year', null);
+        $date['month'] = $this->_getParam('month', null);
+        $date['day']   = $this->_getParam('day', null);
+
+        $model = $this->_getPhotoModel();
+
+        $entries = $model->fetchEntriesByCreated($date, $this->_getParam('page', 1));
+
+        $this->view->paginator = $entries;
+    }
+
     /**
      * Create new photo
      *

@@ -228,12 +228,44 @@ class PhotoModel extends AbstractModel
         );
 
         if (null !== $page) {
-        $entries  = Zend_Paginator::factory($entries);
-        $entries->setItemCountPerPage(6)
-            ->setPageRange(8)
-            ->setCurrentPageNumber($page);
+            $entries = $this->_paginateResult($entries, $page);
         }
 
+        return $entries;
+    }
+
+    public function fetchEntriesByCreated(array $date, $page = null)
+    {
+        $dateString = $date['year'] . $date['month'] . $date['day'] . '%';
+
+        $entries = $this->getTable()->fetchAll(
+            $this->getTable()->select()
+            ->where('date_format(created_on, "%Y%m%d") like ?', $dateString)
+            ->order('created_on desc')
+        );
+
+        if (null !== $page) {
+            $entries = $this->_paginateResult($entries, $page);
+        }
+
+        return $entries;
+    }
+
+    public function fetchArchive() 
+    {
+        $sql = 'select date_format(created_on, "%Y-%m") as created_on, count(1) as `count`' 
+             . 'from photos group by date_format(created_on, "%Y-%m") '
+             . 'order by created_on desc';
+        $db = $this->getTable()->getAdapter();
+        return $db->fetchAll($sql);
+    }
+
+    private function _paginateResult($entries, $page)
+    {
+        $entries  = Zend_Paginator::factory($entries);
+        $entries->setItemCountPerPage(9)
+            ->setPageRange(8)
+            ->setCurrentPageNumber($page);    
         return $entries;
     }
 
