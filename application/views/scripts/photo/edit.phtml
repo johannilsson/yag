@@ -3,4 +3,4 @@
 <p><a href="<?= $this->url(array('controller' => 'photo', 'action' => 'delete', 'id' => $this->photo->id)); ?>">Delete this photo</a></p>
 <?= $this->partial('_photo.phtml', array('photo' => $this->photo, 'style' => 'small')) ?>
 <?= $this->photoForm ?>
-<?= $this->photoStream($this->photo) ?> 
+<?= $this->photoStream($this->photo, '_editStream.phtml') ?> 
