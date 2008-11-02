@@ -1,0 +1,14 @@
+<ul class="archive">
+<?php foreach ($this->archive as $year => $months) :?>
+    <li>
+        <a href="<?= $this->url(array('year' => $year), 'bycreated') ?>"><?= $year ?></a>
+        <ul>
+
+            <?php foreach ($months as $month => $count) :?>
+            <li><a href="<?= $this->url(array('year' => $year, 'month' => $month), 'bycreated-month') ?>"><?= $month ?></a> (<?= $count ?>)</li>
+            <?php endforeach; ?>
+
+        </ul>
+    </li>
+<?php endforeach; ?>
+</ul>
