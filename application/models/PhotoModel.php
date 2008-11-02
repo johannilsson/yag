@@ -184,7 +184,7 @@ class PhotoModel extends AbstractModel
         }
         $exifSupport = array(IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM);
         if (!in_array(exif_imagetype($file), $exifSupport)) {
-            return;
+            return array();
         }
 
         // TODO: Verify that we are dealing with an exif friendly file...
