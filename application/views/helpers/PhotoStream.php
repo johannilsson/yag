@@ -20,7 +20,7 @@ class Zend_View_Helper_PhotoStream
      * @param  Zend_Db_Table_Row $photo
      * @return string
      */
-    public function photoStream($photo)
+    public function photoStream($photo, $partial = null)
     {
         require_once APPLICATION_PATH . '/models/PhotoModel.php'; 
         $model = new PhotoModel; 
@@ -32,7 +32,11 @@ class Zend_View_Helper_PhotoStream
             'next'     => $neighbours['next']
         );
 
-        return $this->view->partial('_stream.phtml', $params);
+        $partial = is_null($partial) 
+            ? '_stream.phtml' 
+            : $partial;
+
+        return $this->view->partial($partial, $params);
     }
 
 }
