@@ -32,6 +32,14 @@ td, th {
     padding: 0.5em;
 }
 
+ul li ul {
+    margin-left: 3em;
+}
+
+ul.archive {
+    list-style: none;
+}
+
 #main {
 	width:900px;
 	margin:20px auto 0px auto;
