@@ -66,7 +66,7 @@ ini_set('error_log', APPLICATION_PATH . '../logs/php_error_log');
 /*
  * View settings
  */
-Zend_View_Helper_PaginationControl::setDefaultViewPartial('_search_pagination_control.phtml');
+Zend_View_Helper_PaginationControl::setDefaultViewPartial('_item_pagination_control.phtml');
 Zend_Paginator::setDefaultScrollingStyle('Sliding');
 
 $layout = Zend_Layout::startMvc(array(
