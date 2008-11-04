@@ -3,13 +3,18 @@
   <head>  
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="/stylesheets/screen.css" media="screen" rel="stylesheet" type="text/css" />
-    <link rel="alternate"	type="application/atom+xml" title="Johan Nilssons Photos" href="<?php echo $this->url(array('controller' => 'photo', 'action' => 'list', 'format' => 'atom')); ?>">
-    <title>YAG</title>
+    <link rel="alternate"	type="application/atom+xml" title="Johan Nilssons Photos" href="<?= $this->url(array('controller' => 'photo', 'action' => 'list', 'format' => 'atom')); ?>">
+    <title>Johan Nilssons Photos</title>
   </head>  
   <body>  
   <div id="main">
-    <h1><a href="<?php echo $this->url(array(), 'photos'); ?>">Johan Nilssons Photos</a></h1>
-	<?php echo $this->layout()->content; ?>  
+    <h1><a href="<?= $this->url(array(), 'photos'); ?>">Johan Nilssons Photos</a></h1>
+	<?= $this->layout()->content; ?>  
+    <div class="bottom">
+        <p><a href="/photo/">List</a> |
+        <a href="/photo/archive/">Archive</a> |
+        <a href="http://gitorious.org/projects/yag/">Get the source</a></p>
+    </div>
   </div>
   </body>  
 </html>

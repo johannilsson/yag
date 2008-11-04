@@ -1,3 +1,2 @@
-<?php echo $this->partial('_album.phtml', array('photos' => $this->paginator)) ?>
-
-<?php echo $this->paginationControl($this->paginator)?>
+<?= $this->partial('_album.phtml', array('photos' => $this->paginator)) ?>
+<?= $this->paginationControl($this->paginator)?>
