@@ -5,23 +5,29 @@
 }
 
 a {
-	color: #7D9EC0;
+	color: #00B2EE;
+	text-decoration: none;
 }
 
-a img { border: none; }
+a img { 
+    border: 3px solid #575757;
+}
 
 body {
-	background-color: #fff;
-	color: #000;
+	background-color: #2B2B2B;
+	color: #CCCCCC;
 	text-align: center;
 	text-align:center;
 	font-family: sans-serif, verdana;
 }
 
 h1 {
+    display: none;
     font-size: 1.5em;
 	margin: 1em 0;
 }
+
+h1 a { color: #CCCCCC; }
 
 h2 {
     font-size: 1.5em;
@@ -48,13 +54,20 @@ ul.archive {
 }
 
 #content {
+    margin-bottom: 1em;
+    width: 500px;
     float: left;
 }
 
 #sidebar {
-    width: 300px;
+    width: 250px;
     float: right;
-    /*background-color: #ff2;*/
+}
+
+.bottom {
+    margin: 1em 0 1em 0;
+    border-top: 1px solid #575757;
+    clear: both;
 }
 
 .errors {
@@ -70,6 +83,10 @@ ul.archive {
 
 .photo h2 {
     margin: 0 1em 1em 0;
+}
+
+ul.breadcrumb li { 
+    display: inline;
 }
 
 .stream {
@@ -100,9 +117,9 @@ ul.stream li {
 }
 .album li { 
     float: left; 
-    height: 260px; 
-    width: 260px; 
-    padding: 10px; 
+    height: 300px; 
+    width: 300px; 
+    padding: 0px 0px; 
     text-align: left; 
 }
 .album h4 { 
@@ -112,6 +129,9 @@ ul.stream li {
     margin: 0; font-size: small; 
 }
 
+ul.breadcrumb {
+    margin: 5px 0;
+}
 
 div.pagination-control {
 	padding: 10px;
