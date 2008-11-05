@@ -2,7 +2,7 @@
 <configure_file service_id="johan" category_id="1" coding_id="2" version="1.0">
 
     <provider>
-        <configure_file_URL>http://www.markupartist.com/services/nokia/</configure_file_URL> 
+        <configure_file_URL><?= $this->url?>/services/nokia/</configure_file_URL> 
         <browserView reltype="mobile" />
         <signup_URL />
         <easy_registration_URL></easy_registration_URL>
@@ -46,7 +46,7 @@
 
     <protocol_options>
             <protocol plugin="Atom" version="0.3" authentication="wsse">
-            <endpoint_path>http://www.markupartist.com/atom/</endpoint_path>
+            <endpoint_path><?= $this->url?>/atom/</endpoint_path>
             <roundtrip_editing>0</roundtrip_editing>
         </protocol>
     </protocol_options>

@@ -33,6 +33,7 @@ class ServicesController extends Zend_Controller_Action
         $layout = $this->_helper->getHelper('layout');
         $layout->direct()->disableLayout();
 
+        $this->view->url = 'http://' . $this->_request->getHttpHost() . $this->_request->getBaseUrl(); 
         $this->_response->setHeader('Content-Type', 'application/isf.sharing.config', true);
     }
 } 
