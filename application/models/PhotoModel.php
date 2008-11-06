@@ -193,8 +193,10 @@ class PhotoModel extends AbstractModel
         // Add lon and lat data if available
         $latitude = $longitude = null;
         if (true === isset($exif['GPSVersion'])) {
-            $latitude = Yag_GeoCode::createFromExif($exif['GPSLatitude']);
-            $longitude = Yag_GeoCode::createFromExif($exif['GPSLongitude']);
+            $codes = Yag_GeoCode::createFromExif($exif);
+
+            $latitude = $codes['lat'];
+            $longitude = $codes['lon'];
 
             $latitude  = $latitude->toDecimalDegrees();
             $longitude = $longitude->toDecimalDegrees();
