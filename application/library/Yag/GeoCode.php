@@ -26,11 +26,11 @@
  */
 class Yag_GeoCode
 {
-    private $_degrees = 0;
-    private $_minutes = 0;
-    private $_seconds = 0;
-    //private $_hemisphere; // TODO: could be calculated
-    
+    private $_degrees;
+    private $_minutes;
+    private $_seconds;
+    private $_hemisphere;
+
     /**
      * Constructor
      *
@@ -38,17 +38,18 @@ class Yag_GeoCode
      * @param int $minutes
      * @param int $seconds
      */
-    public function __construct($degrees = 0, $minutes = 0, $seconds = 0)
+    public function __construct($degrees, $minutes = 0, $seconds = 0, $hemisphere = '')
     {
         if (is_array($degrees) && count($degrees) == 3) {
-            $minutes = $degrees[1];
-            $seconds = $degrees[2];
-            $degrees = $degrees[0];
+            $hemisphere = $minutes;
+            $minutes    = $degrees[1];
+            $seconds    = $degrees[2];
+            $degrees    = $degrees[0];
         }
-
-        $this->_degrees = $degrees;
-        $this->_minutes = $minutes;
-        $this->_seconds = $seconds;
+        $this->_degrees    = $degrees;
+        $this->_minutes    = $minutes;
+        $this->_seconds    = $seconds;
+        $this->_hemisphere = $hemisphere;
     }
 
     /**
@@ -60,6 +61,7 @@ class Yag_GeoCode
      */
     public static function createFromDecimalDegrees($decimalDegrees)
     {
+        // TODO: needs to know if lon or lat to calculate hemisphere... 
         // TODO: Fix error handling and validation, isset is temporary for now...
         $pattern = '/^(-?[0-9]+)(.[0-9]+)/';
         preg_match($pattern, $decimalDegrees, $matches);
@@ -76,7 +78,8 @@ class Yag_GeoCode
     /**
      * Extracts and converts degrees minutes seconds from exif array.
      *
-     * Passed data should be either the GPSLatitude or GPSLongitude array.
+     * Passed data should be the full exif data, will internally read from 
+     * GPSLatitude, GPSLatitudeRef, GPSLongitude and GPSLongitudeRef.
      *
      * Example: 
      * <code>
@@ -84,18 +87,33 @@ class Yag_GeoCode
      * </code>
      *
      * @param array $data
-     * @return array
+     * @return array with lon and lat keys representing longitude and latitude.
      */
     public static function createFromExif(array $data)
     {
-        $parts = array();
-        foreach ($data as $part)
+        $lonParts = self::readFromExif($data['GPSLongitude'], $data['GPSLongitudeRef']);
+        $latParts = self::readFromExif($data['GPSLatitude'], $data['GPSLatitudeRef']);
+        return array (
+            'lon' => new self($lonParts, $data['GPSLongitudeRef']), 
+            'lat' => new self($latParts, $data['GPSLatitudeRef'])
+        );
+    }
+
+    public static function readFromExif(array $cordinatates, $hemisphere) 
+    {
+        $parts = array();        
+        foreach ($cordinatates as $part)
         {
             $values = explode('/', $part);
             $s = $values[0] / $values[1];
             $parts[] = $s;
         }
-        return new self($parts);
+
+        if (in_array($hemisphere, array('W', 'S'))) {
+            $parts[0] = -1 * $parts[0];
+        }
+
+        return $parts;
     }
 
     /**
@@ -123,6 +141,14 @@ class Yag_GeoCode
      */
     public function __toString()
     {
-        return sprintf("%s° %s' %s\"", $this->_degrees, $this->_minutes, $this->_seconds);
+        if (($degrees = $this->_degrees) < 0) {
+            $degrees *= -1;
+        }
+
+        return sprintf("%s° %s' %s\" %s", 
+            $degrees, 
+            $this->_minutes, 
+            $this->_seconds, 
+            $this->_hemisphere);
     }
 }
