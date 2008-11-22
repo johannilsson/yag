@@ -14,7 +14,7 @@
 
 /*
  * Set include path
- */
+ */ 
 $includePath = array(
 	get_include_path(),
 	dirname(__FILE__) . '/library',
@@ -62,32 +62,4 @@ date_default_timezone_set('UTC');
 error_reporting(E_ALL);
 ini_set('display_errors', ENVIRONMENT == 'development');
 ini_set('error_log', APPLICATION_PATH . '../logs/php_error_log');
-
-/*
- * View settings
- */
-Zend_View_Helper_PaginationControl::setDefaultViewPartial('_item_pagination_control.phtml');
-Zend_Paginator::setDefaultScrollingStyle('Sliding');
-
-$layout = Zend_Layout::startMvc(array(
-    'layout'     => 'standard',
-    'layoutPath' => APPLICATION_PATH . '/views/layouts',
-));
-
-$view = $layout->getView();
-$view->addHelperPath('Yag/View/Helper/', 'Yag_View_Helper');
-
-/*
- * Set up the front controller 
- */
-$front = Zend_Controller_Front::getInstance();
-
-$front->setParam('noErrorHandler', ENVIRONMENT == 'development');
-$front->throwExceptions(ENVIRONMENT == 'development');
-
-$front->getRouter()->addConfig($routeConfig, 'routes');
-
-$front->registerPlugin(new Yag_Controller_Plugin_Auth($authConfig));
-
-$front->run(APPLICATION_PATH . '/controllers');
 
