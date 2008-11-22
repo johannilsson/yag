@@ -4,10 +4,16 @@ USE yag
 
 SET FOREIGN_KEY_CHECKS=0;
 
+DROP TABLE IF EXISTS _VERSION_1_0_1;
+CREATE TABLE `_VERSION_1_0_1` (
+  `dummy` varchar(1) default NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS photos;
 CREATE TABLE `photos` (
   `id` int(11) NOT NULL auto_increment,
   `title` varchar(100) default NULL,
+  `clean_title` varchar(100) default NULL,
   `description` varchar(255) default NULL,
   `image` varchar(100) default NULL,
   `image_filesize` int default NULL,
@@ -33,6 +39,7 @@ DROP TABLE IF EXISTS tags;
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
+  `clean_name` varchar(50) default NULL,
   `created_on` DATETIME default NULL,  
   `updated_on` DATETIME default NULL,  
   PRIMARY KEY  (`id`)

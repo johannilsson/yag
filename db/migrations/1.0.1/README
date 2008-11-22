@@ -1,0 +1,14 @@
+# README
+
+Will add clean_title column to the table photos.
+Will add a _VERSION_1_0_1 table.
+
+## Files
+
+* up.sql - sql to upgrade database
+* migrate.php - php script to alter existing photos
+
+## Migrate
+
+* Run up.sql 
+* Run migrate.php
