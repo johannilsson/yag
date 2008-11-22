@@ -61,6 +61,13 @@ class PhotoModel extends AbstractModel
             $values['created_on'] = $data['created_on'];
         }
 
+        // If a clean title is not provided or is empty set it.
+        if (!isset($values['clean_title']) || $values['clean_title'] = '') {
+            $values['clean_title'] = $values['title'];
+        }
+        $sanitizeFilter = new Yag_Filter_SanitizeString();
+        $values['clean_title'] = $sanitizeFilter->filter($values['clean_title']);
+
         $id = $this->getTable()->insert(
             $this->_getTableValues($values));
 
@@ -73,7 +80,15 @@ class PhotoModel extends AbstractModel
     {
         $values = $this->_getValues($data);
 
+        // If a clean title is not provided or is empty set it.
+        if (!isset($values['clean_title']) || $values['clean_title'] = '') {
+            $values['clean_title'] = $values['title'];
+        }
+        $sanitizeFilter = new Yag_Filter_SanitizeString();
+        $values['clean_title'] = $sanitizeFilter->filter($values['clean_title']);
+
         $where = $this->getTable()->getAdapter()->quoteInto('id = ?', $id);
+
         $this->getTable()->update(
             $this->_getTableValues($values),
             $where);
