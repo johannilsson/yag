@@ -19,7 +19,7 @@ require_once 'Zend/Controller/Action.php';
  * Controller for displaying and editing a photo.
  *
  */
-class PhotoController extends AbstractController
+class PhotosController extends AbstractController
 {
     /**
      * Init
@@ -212,15 +212,13 @@ class PhotoController extends AbstractController
     public function showAction()
     {
         $model   = $this->_getPhotoModel();
-        $photo   = $model->fetchEntry($this->getRequest()->getParam('id'));
+        $photo   = $model->fetchEntryByCleanTitle($this->getRequest()->getParam('title'));
 
         if (null === $photo) {
             return $this->_forward('notfound', 'error');
         }
 
-        //$tags = $photo->findTagsViaTaggedPhotosByPhoto();
         $this->view->photo  = $photo;
-        $this->view->tags   = array();//$tags;
     }
 
     /**

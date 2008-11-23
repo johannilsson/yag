@@ -23,7 +23,7 @@ class Zend_View_Helper_PhotoLink
     public function photoLink($photo)
     {
         return $this->view->url(array(
-            'id'    => $photo->id, 
+            'title'    => $photo->clean_title, 
             'year'  => date('Y', strtotime($photo->created_on)), 
             'month' => date('m', strtotime($photo->created_on)), 
             'day'   => date('d', strtotime($photo->created_on))

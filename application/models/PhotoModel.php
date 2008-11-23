@@ -298,6 +298,14 @@ class PhotoModel extends AbstractModel
         return $table->fetchRow($select);
     }
 
+    public function fetchEntryByCleanTitle($title)
+    {
+        $table = $this->getTable();
+        $select = $table->select()->where('clean_title = ?', $title);
+
+        return $table->fetchRow($select);
+    }
+
     public function fetchNeighbours($photo)
     {
         return array(
