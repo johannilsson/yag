@@ -24,7 +24,7 @@ class IndexController extends Zend_Controller_Action
 	 */
 	public function indexAction() 
 	{
-        $this->_redirect($this->_helper->url('list', 'photo'));
+        $this->_redirect($this->_helper->url('list', 'photos'));
 	}
 
 } 
