@@ -68,6 +68,7 @@ class AtomController extends AbstractController
      */
     public function indexAction() 
     {
+        $this->view->url = 'http://' . $this->_request->getHttpHost() . $this->_request->getBaseUrl();
         // TODO: This is for atom 1.0
         //$this->_response->setHeader('Content-Type', 'application/atomsvc+xml', true);
     }
