@@ -38,6 +38,14 @@ td, th {
     padding: 0.5em;
 }
 
+dl {
+    padding: 0.5em 0;
+}
+
+dt {
+    font-weight: bold;
+}
+
 ul li ul {
     margin-left: 3em;
 }

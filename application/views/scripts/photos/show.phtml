@@ -8,6 +8,10 @@
 
 <div id="sidebar">
     <?= $this->photoStream($this->photo) ?> 
+    <dl>
+        <dt>Taken on</dt>
+        <dd><?= $this->photo->taken_on?></dd>
+    </dl>
     <?= $this->photoTags($this->photo) ?>
     <?= $this->map($this->photo) ?>
 </div>
