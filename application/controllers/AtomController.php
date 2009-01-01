@@ -159,7 +159,7 @@ class AtomController extends AbstractController
 
             $this->_response->setHttpResponseCode(201);
             $this->_response->setHeader('Status', '201 Created');
-            $this->_response->setHeader('Location', $url . $this->_helper->url('view', 'photo', null, array('id' => $id)));
+            $this->_response->setHeader('Location', $url . $this->_helper->url('show', 'photo', null, array('id' => $id)));
 
             $this->view->url   = $url;
             $this->view->photo = $photoModel->fetchEntry($id);

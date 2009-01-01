@@ -21,7 +21,7 @@ require_once 'AbstractController.php';
  */
 class TagsController extends AbstractController
 {
-    /*
+/*
     public function newAction()
     {
         $form = $this->_getTagModel()->getForm();
@@ -35,8 +35,7 @@ class TagsController extends AbstractController
             $this->_redirect($this->_helper->url('new'));
         }
     }
-    */
-
+*/
     public function showAction()
     {
         $model = $this->_getTagModel();

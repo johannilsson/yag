@@ -55,7 +55,8 @@ Zend_Registry::set('db', $db);
  * Date settings
  */
 date_default_timezone_set('UTC');
-
+$locale = new Zend_Locale('en_GB');
+Zend_Registry::set('Zend_Locale', $locale);
 /*
  * Error handling
  */

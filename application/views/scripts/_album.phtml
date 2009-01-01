@@ -5,7 +5,7 @@
 	        <h4><?= $photo->title ?></h4>
 	        <p><a href="<?= $this->photoLink($photo) ?>"><?= $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small')) ?></a></p>
 	        <p><?= $photo->description?></p>
-	        <p><small>Taken on <?= $photo->taken_on?></small></p>
+	        <p><small>Taken on <?= $this->date($photo->taken_on) ?></small></p>
 	    </li>
     <?php endforeach; ?>
     </ul>
