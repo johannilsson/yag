@@ -19,7 +19,7 @@ require_once 'Zend/Controller/Action.php';
  * Controller for errors
  *
  */
-class ErrorController extends Zend_Controller_Action
+class ErrorController extends AbstractController
 {
     public function errorAction()
     {
@@ -52,6 +52,14 @@ class ErrorController extends Zend_Controller_Action
                 $message = $exception->getMessage();
                 break;
         }
+
+        $photoModel = $this->_getPhotoModel();
+        try {
+          $this->view->photos = $photoModel->fetchEntries(1);
+        } catch (Exception $e) {
+          ;
+        }
+
         $this->view->message = $message;
     }
 
@@ -60,5 +68,8 @@ class ErrorController extends Zend_Controller_Action
         $this->getResponse()
              ->setRawHeader('HTTP/1.1 404 Not Found');
         $this->view->message = "404 Not Found";
+
+        $photoModel = $this->_getPhotoModel();
+        $this->view->photos = $photoModel->fetchEntries(1);
     }
 }

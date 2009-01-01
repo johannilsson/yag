@@ -105,5 +105,5 @@ class TaggedPhotos extends Yag_Db_Table
             $assoccTags[] = $tag;
         }
         return $assoccTags;
-    }    
+    }
 }

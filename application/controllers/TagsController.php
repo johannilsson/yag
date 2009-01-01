@@ -43,11 +43,14 @@ class TagsController extends AbstractController
         $tag = $model->fetchEntryByName(
             urldecode($this->getRequest()->getParam('name')));
 
-        $photos = array();
-        if (null !== $tag) {
-            // TODO: Add to model and add paging when we grow...
-            $photos = $tag->findPhotosViaTaggedPhotosByTag();
+        if (null === $tag) {
+            return $this->_forward('notfound', 'error');
         }
+
+        $photos = $this->_getPhotoModel()->fetchEntriesByTag(
+              $tag->id, $this->_getParam('page', 1));
+
+        $this->view->tag = $tag;
         $this->view->photos = $photos;
     }
 }

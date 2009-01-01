@@ -21,6 +21,11 @@ body {
 	font-family: sans-serif, verdana;
 }
 
+p {
+  margin-bottom: 0.6em;
+  font-size: 0.8em;
+}
+
 h1 {
   font-size: 1.5em;
   font-weight: normal;
@@ -31,7 +36,12 @@ h1 a { color: #666666; }
 
 h2 {
   font-size: 1.5em;
+  margin-bottom: 0.6em;
   font-weight: normal;
+}
+
+h3 {
+  margin-bottom: 0.6em;
 }
 
 h4 {
@@ -103,7 +113,9 @@ ul.archive {
   -moz-border-radius-bottomleft:5px;
   -moz-border-radius-bottomright:5px;
 }
-
+.bottom p {
+  margin: 0;
+}
 .bottom a {
   color: #fff;
   margin: 0 5px;
@@ -141,7 +153,6 @@ ul.stream {
 }
 ul.stream li { 
     float: left;
-    margin-left: 20px;
     padding: 10px; 
     height: 75px; 
     width: 75px;

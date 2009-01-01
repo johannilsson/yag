@@ -192,6 +192,7 @@ class PhotoModel extends AbstractModel
         return $variant . '-' . $baseName;
     }
 
+    // TODO: Move to a file model...
     private function getImageDetails($file)
     {
         if (false == file_exists($file)) {
@@ -236,6 +237,27 @@ class PhotoModel extends AbstractModel
         );
 
         return $data;
+    }
+
+    public function fetchEntriesByTag($id, $page = null)
+    {
+        $select = $this->getTable()->select()
+          ->setIntegrityCheck(false)
+          ->from('photos')
+          ->join('tagged_photos', 'photos.id = tagged_photos.photo_id')
+          ->where('tagged_photos.tag_id = ?', $id)
+          ->order('taken_on desc')
+          ->order('created_on desc');
+
+        $entries = $this->getTable()->fetchAll(
+          $select
+        );
+
+        if (null !== $page) {
+            $entries = $this->_paginateResult($entries, $page);
+        }
+
+        return $entries;
     }
 
     public function fetchEntries($page = null)

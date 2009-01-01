@@ -212,7 +212,7 @@ class PhotosController extends AbstractController
     public function showAction()
     {
         $model   = $this->_getPhotoModel();
-        $photo   = $model->fetchEntryByCleanTitle($this->getRequest()->getParam('title'));
+        $photo   = $model->fetchEntry($this->getRequest()->getParam('id'));
 
         if (null === $photo) {
             return $this->_forward('notfound', 'error');
@@ -226,7 +226,7 @@ class PhotosController extends AbstractController
      * 
      * DELETE
      */
-    public function deleteAction()
+    public function destroyAction()
     {
         $model = $this->_getPhotoModel();
 

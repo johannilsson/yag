@@ -1,2 +1,12 @@
-<h2>404 Not Found</h2>
-<p><?php echo $this->message ?></p>
+<h2>Bummer, nothing here...</h2>
+<p>Make sure to check the <a href="<?= $this->url(array(), 'archives_path') ?>">archive</a> if you are looking for anything special.</p>
+
+<h3>Latest photos</h3>
+<ul class="stream">
+<?php foreach ($this->photos as $photo): ?>
+  <li>
+      <p><a href="<?= $this->photoLink($photo) ?>"><?= $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'square')) ?></a></p>
+  </li>
+<?php endforeach; ?>
+</ul>
+
