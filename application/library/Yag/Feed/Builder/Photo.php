@@ -76,12 +76,15 @@ class Yag_Feed_Builder_Photo implements Zend_Feed_Builder_Interface
         $this->_header = new Zend_Feed_Builder_Header($title, $link, $charset);
     }
 
-    public function addEntry($photo, $link, $content = "")
+    public function addEntry($photo, $path, $enclosure, $content = "")
     {
-        $entry = new Zend_Feed_Builder_Entry($photo->title, $this->_link . $link, $photo->description);
+        $entry = new Zend_Feed_Builder_Entry($photo->title, $this->_link . $path, $photo->description);
         $entry->setId($photo->id);
         $entry->setContent($content);
-        $entry->addEnclosure($this->_link . $link, 'image/jpeg'); // TODO: Fix types
+        
+        $date = new Zend_Date($photo->created_on);
+        $entry->setLastUpdate($date->get(Zend_Date::TIMESTAMP));
+        $entry->addEnclosure($this->_link . $enclosure, 'image/jpeg'); // TODO: Fix types
 
         $this->_entries[] = $entry;
         return $this;

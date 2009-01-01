@@ -11,10 +11,10 @@
     <?= $this->photoTags($this->photo) ?>
     <h4>Additional Information</h4>
     <ul class="details">
-        <li>Taken on <?= $this->photo->taken_on?></li>
+        <li>Taken on <?= $this->date($this->photo->taken_on) ?></li>
         <li>Taken with a <?= $this->photo->make ?> <?= $this->photo->model ?></li>
         <?php if ($this->auth->hasIdentity()) :?>
-        <li><a href="<?= $this->url(array('id' => $this->photo->id), 'photo_edit_path') ?>">Edit</a></li>
+        <li><a href="<?= $this->url(array('id' => $this->photo->id), 'photos_edit_path') ?>">Edit</a></li>
         <?php endif?>
     </ul>
 

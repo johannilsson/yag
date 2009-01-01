@@ -1,0 +1,11 @@
+<?php
+
+$feedBuilder = new Yag_Feed_Builder_Photo('Photo', $this->url);
+
+foreach ($this->paginator as $photo) {
+    $content = $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small', 'url' => $this->url));
+    $feedBuilder->addEntry($photo, $this->url(array('id' => $photo->id), 'photos_show_path'), $this->photoUrl($photo, 'medium'), $content);   
+}
+
+$feed = Zend_Feed::importBuilder($feedBuilder, 'rss');
+$feed->send();

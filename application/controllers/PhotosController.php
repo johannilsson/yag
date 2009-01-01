@@ -27,19 +27,25 @@ class PhotosController extends AbstractController
      */
     public function init()
     {
-        $context = array(
-            'suffix'  => 'atom', 
+        $contexts = array(
+          'atom' => array(
+                'suffix'  => 'atom', 
+                'headers' => array(
+                    'Content-Type' => 'application/atom+xml',
+                ),
+          ), 
+          'rss' => array(
+            'suffix'  => 'rss', 
             'headers' => array(
-                'Content-Type' => 'application/atom+xml',
+                'Content-Type' => 'application/rss+xml',
             ),
+          )
         );
-
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
-        if (false === $contextSwitch->hasContext('atom')) {
-            $contextSwitch->addContext('atom', $context)
-                          ->addActionContext('list', 'atom')
-                          ->initContext();
-        }
+        $contextSwitch->addContexts($contexts)
+                      ->addActionContext('list', array('atom', 'rss'))
+                      ->initContext();
+
     }
 
     /**
