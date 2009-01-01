@@ -218,6 +218,7 @@ class PhotosController extends AbstractController
             return $this->_forward('notfound', 'error');
         }
 
+        $this->view->auth = Zend_Auth::getInstance();
         $this->view->photo  = $photo;
     }
 

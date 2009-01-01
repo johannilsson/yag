@@ -10,28 +10,40 @@ a {
 }
 
 a img { 
-    border: 3px solid #575757;
+  border: none;
 }
 
 body {
-	background-color: #2B2B2B;
-	color: #CCCCCC;
+	background-color: #fff;
+	color: #000;
 	text-align: center;
 	text-align:center;
 	font-family: sans-serif, verdana;
 }
 
 h1 {
-    display: none;
-    font-size: 1.5em;
-	margin: 1em 0;
+  font-size: 1.5em;
+  font-weight: normal;
+  margin: 1em 0;
 }
 
-h1 a { color: #CCCCCC; }
+h1 a { color: #666666; }
 
 h2 {
-    font-size: 1.5em;
-	margin: 1em;
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+h4 {
+  font-size: .9em;
+}
+
+small {
+  font-size: 85%;
+}
+
+.album small {
+  color: #666666;
 }
 
 td, th {
@@ -44,6 +56,10 @@ dl {
 
 dt {
     font-weight: bold;
+}
+
+li {
+  font-size: 0.8em;
 }
 
 ul li ul {
@@ -68,14 +84,29 @@ ul.archive {
 }
 
 #sidebar {
-    width: 250px;
-    float: right;
+  width: 250px;
+  float: right;
+}
+
+#sidebar h4 {
+  margin-top: 10px;
 }
 
 .bottom {
-    margin: 1em 0 1em 0;
-    border-top: 1px solid #575757;
-    clear: both;
+  text-align: center;
+  padding: 5px;
+  margin: 1em 0 1em 0;
+  clear: both;
+  background-color: #666666;
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-topright:5px;
+  -moz-border-radius-bottomleft:5px;
+  -moz-border-radius-bottomright:5px;
+}
+
+.bottom a {
+  color: #fff;
+  margin: 0 5px;
 }
 
 .errors {
@@ -85,12 +116,8 @@ ul.archive {
     background-color: #FFC1C1;
 }
 
-.tags ul {
+ul {
     padding: 0.5em 1.5em; 
-}
-
-.photo h2 {
-    margin: 0 1em 1em 0;
 }
 
 ul.breadcrumb li { 
@@ -98,8 +125,14 @@ ul.breadcrumb li {
 }
 
 .stream {
-    clear: both; 
-    overflow: hidden;
+  text-align: center;
+  clear: both; 
+  overflow: hidden;
+  background-color: #EBEBEB;
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-topright:5px;
+  -moz-border-radius-bottomleft:5px;
+  -moz-border-radius-bottomright:5px;
 }
 ul.stream { 
     list-style: none; 
@@ -107,7 +140,8 @@ ul.stream {
     padding: 0; 
 }
 ul.stream li { 
-    float: left; 
+    float: left;
+    margin-left: 20px;
     padding: 10px; 
     height: 75px; 
     width: 75px;
@@ -142,8 +176,9 @@ ul.breadcrumb {
 }
 
 div.pagination-control {
+  font-size: .8em;
+  text-align: center;
 	padding: 10px;
-	border: 1px solid #DEDEDE;
 }
 
 div.pagination-control a {
@@ -151,7 +186,7 @@ div.pagination-control a {
 }
 
 div.pagination-control span.item {
-	padding: 2px;
+	padding: 5px;
 	border: 1px solid #DEDEDE;
 }
 

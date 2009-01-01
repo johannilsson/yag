@@ -17,7 +17,7 @@ require_once dirname(__FILE__) . '/bootstrap.php';
 /*
  * View settings
  */
-Zend_View_Helper_PaginationControl::setDefaultViewPartial('_item_pagination_control.phtml');
+Zend_View_Helper_PaginationControl::setDefaultViewPartial('_search_pagination_control.phtml');
 Zend_Paginator::setDefaultScrollingStyle('Sliding');
 
 $layout = Zend_Layout::startMvc(array(

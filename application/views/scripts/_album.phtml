@@ -2,8 +2,10 @@
     <ul>
     <?php foreach ($this->photos as $photo): ?>
 	    <li>
-	        <h4><?php echo $photo->title ?></h4>
-	        <p><a href="<?= $this->photoLink($photo) ?>"><?php echo $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small')) ?></a></p>
+	        <h4><?= $photo->title ?></h4>
+	        <p><a href="<?= $this->photoLink($photo) ?>"><?= $this->partial('_photo.phtml', array('photo' => $photo, 'style' => 'small')) ?></a></p>
+	        <p><?= $photo->description?></p>
+	        <p><small>Taken on <?= $photo->taken_on?></small></p>
 	    </li>
     <?php endforeach; ?>
     </ul>
