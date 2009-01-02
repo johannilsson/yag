@@ -290,11 +290,29 @@ class PhotoModel extends AbstractModel
         return $entries;
     }
 
-    public function fetchArchive() 
+    public function fetchEntriesByTakenAt(array $date, $page = null)
     {
-        $sql = 'select date_format(created_on, "%Y-%m") as created_on, count(1) as `count`' 
-             . 'from photos group by date_format(created_on, "%Y-%m") '
-             . 'order by created_on desc';
+        $dateString = $date['year'] . $date['month'] . $date['day'] . '%';
+        $select = $this->getTable()->select()
+            ->where('date_format(taken_on, "%Y%m%d") like ?', $dateString)
+            ->order('taken_on desc');
+        $entries = $this->getTable()->fetchAll(
+          $select
+        );
+
+        if (null !== $page) {
+            $entries = $this->_paginateResult($entries, $page);
+        }
+
+        return $entries;
+    }
+
+    // TODO: Ok split this up, dont like the concating here at all...
+    public function fetchArchive($orderBy = "created_on")
+    {
+        $sql = 'select date_format(' . $orderBy . ', "%Y-%m") as date, count(1) as `count`' 
+             . 'from photos group by date_format(' . $orderBy . ', "%Y-%m") '
+             . 'order by ' . $orderBy . ' desc';
         $db = $this->getTable()->getAdapter();
         return $db->fetchAll($sql);
     }

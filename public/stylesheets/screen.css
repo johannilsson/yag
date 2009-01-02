@@ -102,6 +102,17 @@ ul.archive {
   margin-top: 10px;
 }
 
+.b1 {
+  float: left;
+  margin: 0 10px 10px 0;
+  padding: 5px;
+  background-color: #EBEBEB;
+  -moz-border-radius-topleft:5px;
+  -moz-border-radius-topright:5px;
+  -moz-border-radius-bottomleft:5px;
+  -moz-border-radius-bottomright:5px;
+}
+
 .bottom {
   text-align: center;
   padding: 5px;

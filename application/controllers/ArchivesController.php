@@ -28,20 +28,37 @@ class ArchivesController extends AbstractController
     public function indexAction()
     {
         $model = $this->_getPhotoModel();
-
-        $archive = array();
+        
+        // Arrgh, not really DRY but what the hell, move to model...
+        
+        // Created at
+        $createdAt = array();
         $prevYear = 0;
         foreach ($model->fetchArchive() as $data) {
-            $split = split('-', $data['created_on']);
+            $split = split('-', $data['date']);
             if ($split[0] != $prevYear) {
                 $months = array();
             }
             $months[$split[1]] = $data['count'];
-            $archive[$split[0]] = $months;
+            $createdAt[$split[0]] = $months;
             $prevYear = $split[0];
         }
 
-        $this->view->archive = $archive;
+        // Taken at
+        $takenAt = array();
+        $prevYear = 0;
+        foreach ($model->fetchArchive('taken_on') as $data) {
+            $split = split('-', $data['date']);
+            if ($split[0] != $prevYear) {
+                $months = array();
+            }
+            $months[$split[1]] = $data['count'];
+            $takenAt[$split[0]] = $months;
+            $prevYear = $split[0];
+        }
+
+        $this->view->createdAt = $createdAt;
+        $this->view->takenAt = $takenAt;
     }
 
     /**
@@ -58,8 +75,12 @@ class ArchivesController extends AbstractController
 
         $model = $this->_getPhotoModel();
 
-        $entries = $model->fetchEntriesByCreated($date, $this->_getParam('page', 1));
-
+        $by = $this->_getParam('by', null);
+        if ($by == 'taken_at') {
+          $entries = $model->fetchEntriesByTakenAt($date, $this->_getParam('page', 1));
+        } else {
+          $entries = $model->fetchEntriesByCreated($date, $this->_getParam('page', 1));
+        }
         $this->view->paginator = $entries;
     }
 }

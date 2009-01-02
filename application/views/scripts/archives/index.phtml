@@ -1,5 +1,8 @@
+<h2>Archives</h2>
+<div class="b1">
+<h3>Created At</h3>
 <ul class="archive">
-<?php foreach ($this->archive as $year => $months) :?>
+<?php foreach ($this->createdAt as $year => $months) :?>
     <li>
         <a href="<?= $this->url(array('year' => $year), 'archives_list_path') ?>"><?= $year ?></a>
         <ul>
@@ -12,3 +15,21 @@
     </li>
 <?php endforeach; ?>
 </ul>
+</div>
+<div class="b1">
+<h3>Taken At</h3>
+<ul class="archive">
+<?php foreach ($this->takenAt as $year => $months) :?>
+    <li>
+        <a href="<?= $this->url(array('year' => $year, 'by' => 'taken_at'), 'archives_list_path') ?>"><?= $year ?></a>
+        <ul>
+
+            <?php foreach ($months as $month => $count) :?>
+            <li><a href="<?= $this->url(array('year' => $year, 'month' => $month, 'by' => 'taken_at'), 'archives_list_month_path') ?>"><?= $month ?></a> (<?= $count ?>)</li>
+            <?php endforeach; ?>
+
+        </ul>
+    </li>
+<?php endforeach; ?>
+</ul>
+</div>
