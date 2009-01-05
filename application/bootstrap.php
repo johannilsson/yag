@@ -27,7 +27,8 @@ Zend_Loader::registerAutoload();
 /*
  * Set up defines
  */
-define('PUBLIC_PATH', dirname(__FILE__) . '/../public');
+defined('PUBLIC_PATH')
+    or define('PUBLIC_PATH', dirname(__FILE__) . '/../public');
 define('APPLICATION_PATH', dirname(__FILE__));
 defined('ENVIRONMENT')
     or define('ENVIRONMENT', 'production');
