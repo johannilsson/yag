@@ -1,0 +1,8 @@
+.buildpath
+.cache
+.project
+.settings
+deploy_env.properties
+dist
+public/yag-conf.php
+upload/*
