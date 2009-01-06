@@ -1,7 +1,7 @@
 <?php
 
-if (file_exists('yag-conf.php')) {
-    require 'yag-conf.php';
+if (file_exists('../yag-conf.php')) {
+    require '../yag-conf.php';
 }
 
 defined('BOOTSTRAP_PATH')
